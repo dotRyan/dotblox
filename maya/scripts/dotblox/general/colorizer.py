@@ -670,8 +670,8 @@ class ColorizerWidget(QtWidgets.QWidget):
         QtCore.QTimer.singleShot(100, resize)
 
     def on_color_btn_presss(self, btn):
-
-        color = self._color_convert(btn.hex_value)
+        raw_color = self._color_convert(btn.hex_value)
+        color = self._color_convert(btn.hex_value, color_managed=True)
 
         is_layer = self.ui.layer_chkbx.isChecked()
         is_object = self.ui.object_chkbx.isChecked()
@@ -698,9 +698,9 @@ class ColorizerWidget(QtWidgets.QWidget):
 
                 if is_outliner and item.hasAttr("useOutlinerColor"):
                     item.useOutlinerColor.set(True)
-                    item.outlinerColor.set(color)
+                    item.outlinerColor.set(raw_color)
 
-    def _color_convert(self, hex_value):
+    def _color_convert(self, hex_value, color_managed=False):
         # Macro
         srgb_to_linear = lambda x: x / 12.92 if x < 0.04045 else ((x + 0.055) / 1.055) ** 2.4
 
@@ -715,7 +715,7 @@ class ColorizerWidget(QtWidgets.QWidget):
         cm_ocio_enabled = pm.colorManagementPrefs(query=True, cmConfigFileEnabled=True)
 
         color = rgbf
-        if cm_enabled:
+        if color_managed and cm_enabled:
             if cm_ocio_enabled:
                 pm.warning("OCIO config enabled. 2.2 Gamma is being used")
 
