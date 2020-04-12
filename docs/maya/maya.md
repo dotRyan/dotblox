@@ -9,7 +9,7 @@ manual process.
   
 Steps:
 1. Copy `dotblox.mod` to `$MAYA_APP_DIR/modules`
-2. Replace `{path}` with the folder path containing the `dotblox.mod` (i.e. `<your_path>/dotblox/maya`) 
+2. Replace `{path}` with the folder path of the repository  (i.e. `<your_path>/dotblox`) 
 
 `$MAYA_APP_DIR` is defined as:
 > Windows Vista, Windows 7, and Windows 8  

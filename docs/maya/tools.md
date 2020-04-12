@@ -11,7 +11,7 @@ Applies to `display layers`, `objects` and the `outliner`
 ###### Run
 ```python
 from dotblox.general import colorizer
-colorizer.run()
+colorizer.dock.show()
 ```
 
 ### Pivoting
@@ -21,7 +21,7 @@ Move the pivot relative to the bounding box
 ###### Run
 ```python
 from dotblox.general import pivoting
-pivoting.run()
+pivoting.dock.show()
 ```
 
 ## Modeling
@@ -34,7 +34,7 @@ Edit bevel history on the selected mesh.
 ###### Run
 ```python
 from dotblox.modeling import beveler
-beveler.run()
+beveler.dock.show()
 ````
 
 ### Mirrorer 
@@ -44,5 +44,5 @@ Mirror geometry across the `world pivot`, `object pivot` or the `bounding box`
 ###### Run
 ```python
 from dotblox.modeling import mirrorer
-mirrorer.run()
+mirrorer.dock.show()
 ```
