@@ -95,7 +95,7 @@ class OptionVar(object):
 
     def get(self, key, default=None):
         option_key = self._format_key(key)
-        if not cmds.optionVar(exists=option_key):
+        if cmds.optionVar(exists=option_key):
             return cmds.optionVar(query=option_key)
         return default
 
