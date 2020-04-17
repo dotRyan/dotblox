@@ -37,6 +37,16 @@ from dotblox.modeling import beveler
 beveler.dock.show()
 ````
 
+### .Modeling
+One window for primatives, mirrorer and pivoting
+![img](./img/dotmodeling.png)
+
+###### Run
+```python
+from dotblox.modeling import dotmodeling
+dotmodeling.dock.show()
+````
+
 ### Mirrorer 
 Mirror geometry across the `world pivot`, `object pivot` or the `bounding box`  
 ![img](./img/mirror.png)
