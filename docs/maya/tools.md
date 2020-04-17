@@ -46,3 +46,14 @@ Mirror geometry across the `world pivot`, `object pivot` or the `bounding box`
 from dotblox.modeling import mirrorer
 mirrorer.dock.show()
 ```
+
+### Primatives
+Create a primitive at the selected components  
+Optionally select a face and move the selected objects 
+![img](./img/primatives.png)
+
+###### Run
+```python
+from dotblox.modeling import primitives
+primitives.dock.show()
+```
