@@ -14,6 +14,16 @@ from dotblox.general import colorizer
 colorizer.run()
 ```
 
+### Pivoting
+Move the pivot relative to the bounding box  
+![img](./img/pivoting.png)
+
+###### Run
+```python
+from dotblox.general import pivoting
+pivoting.run()
+```
+
 ## Modeling
 
 ### Beveler
@@ -36,4 +46,3 @@ Mirror geometry across the `world pivot`, `object pivot` or the `bounding box`
 from dotblox.modeling import mirrorer
 mirrorer.run()
 ```
-
