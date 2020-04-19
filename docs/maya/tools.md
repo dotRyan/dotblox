@@ -38,7 +38,7 @@ beveler.dock.show()
 ````
 
 ### .Modeling
-One window for primatives, mirrorer and pivoting
+One window for primatives, mirrorer and pivoting  
 ![img](./img/dotmodeling.png)
 
 ###### Run
@@ -59,7 +59,7 @@ mirrorer.dock.show()
 
 ### Primatives
 Create a primitive at the selected components  
-Optionally select a face and move the selected objects 
+Optionally select a face and move the selected objects  
 ![img](./img/primatives.png)
 
 ###### Run

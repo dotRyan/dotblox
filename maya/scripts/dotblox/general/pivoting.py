@@ -1,7 +1,7 @@
-from dotblox.core.ui import dockwindow
+from maya import cmds
 from PySide2 import QtWidgets, QtCore, QtGui
-import pymel.core as pm
 
+from dotblox.core.ui import dockwindow
 from dotblox.core.general import pivot_to_bb
 from dotblox.core.constant import AXIS, DIRECTION
 
@@ -27,9 +27,9 @@ class PivotingWidget(QtWidgets.QWidget):
         self.ui.setup_ui(self)
 
         self.ui.center_btn.clicked.connect(
-                lambda: pm.xform(centerPivotsOnComponents=True))
+                lambda: cmds.xform(centerPivotsOnComponents=True))
         self.ui.bake_btn.clicked.connect(
-                lambda: pm.runtime.BakeCustomPivot()
+                lambda: cmds.BakeCustomPivot()
         )
 
         self.ui.pos_x_btn.clicked.connect(

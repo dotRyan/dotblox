@@ -1,10 +1,12 @@
 """
 """
 
+from maya import cmds
 from PySide2 import QtWidgets, QtCore, QtGui
 from dotblox.core.mutil import OptionVar
+
+from dotblox.core.mutil import OptionVar
 from dotblox.core.ui import dockwindow
-import pymel.core as pm
 
 from dotbloxlib import color as colorlib
 from dotblox.core import color as colorm
@@ -164,7 +166,7 @@ class ColorizerWidget(QtWidgets.QWidget):
             display_layers = self.get_selected_display_layers()
 
             if not len(display_layers):
-                pm.inViewMessage(
+                cmds.inViewMessage(
                         message="No Display Late",
                         pos='midCenter',
                         fade=True,
@@ -173,32 +175,32 @@ class ColorizerWidget(QtWidgets.QWidget):
                         fadeStayTime=1250)
 
             for display_layer in display_layers:
-                display_layer.color.set(True)
-                display_layer.overrideRGBColors.set(False)
+                cmds.setAttr(display_layer + ".color", True)
+                cmds.setAttr(display_layer + ".overrideRGBColors", False)
             return
 
-        selection = pm.ls(selection=True)
+        selection = cmds.ls(selection=True, long=True)
 
         for item in selection:  # type: pm.PyNode
-            if self.is_object and item.hasAttr("overrideEnabled"):
+            if self.is_object and cmds.objExists(item + ".overrideEnabled"):
                 # TODO: do we turn this off?
                 #       how do we know the only change was made to the color
                 #       would be really helful to add a custom attribute
-                # item.overrideEnabled.set(True)
-                item.overrideRGBColors.set(False)
+                # cmds.setAttr(item + ".overrideEnabled", True)
+                cmds.setAttr(item + ".overrideRGBColors", False)
 
-            if self.is_outliner and item.hasAttr("useOutlinerColor"):
-                item.useOutlinerColor.set(False)
+            if self.is_outliner and cmds.objExists(item + ".useOutlinerColor"):
+                cmds.setAttr(item + ".useOutlinerColor", False)
 
     def get_selected_display_layers(self):
         # Note: we could get all displayLayer nodes but there is no way
         #       to select them without going through the UI so we do it this way
-        display_layers = pm.layout("LayerEditorDisplayLayerLayout",
+        display_layers = cmds.layout("LayerEditorDisplayLayerLayout",
                                    query=True,
                                    childArray=True) or []
-        return [pm.PyNode(display_layer)
+        return [display_layer
                 for display_layer in display_layers
-                if pm.layerButton(display_layer, query=True, select=True)]
+                if cmds.layerButton(display_layer, query=True, select=True)]
 
     def build_palette(self, mode):
         columns = self.ui.palette_grid.columnCount()
@@ -250,47 +252,24 @@ class ColorizerWidget(QtWidgets.QWidget):
 
             for display_layer in self.get_selected_display_layers():
                 # This is on by default but just in case
-                display_layer.enabled.set(True)
-                display_layer.overrideColorRGB.set(color)
-                display_layer.color.set(False)
-                display_layer.overrideRGBColors.set(True)
+                cmds.setAttr(display_layer + ".enabled", True)
+                cmds.setAttr(display_layer + ".overrideColorRGB", *color)
+                cmds.setAttr(display_layer + ".color", False)
+                cmds.setAttr(display_layer + ".overrideRGBColors", True)
 
         if is_object or is_outliner:
 
-            selection = pm.ls(selection=True)
+            selection = cmds.ls(selection=True, long=True)
 
-            for item in selection:  # type: pm.PyNode
-                if is_object and item.hasAttr("overrideEnabled"):
-                    item.overrideEnabled.set(True)
-                    item.overrideRGBColors.set(True)
-                    item.overrideColorRGB.set(color)
+            for item in selection:
+                if is_object and cmds.objExists(item + ".overrideEnabled"):
+                    cmds.setAttr(item + ".overrideEnabled", True)
+                    cmds.setAttr(item + ".overrideRGBColors", True)
+                    cmds.setAttr(item + ".overrideColorRGB", *color)
 
-                if is_outliner and item.hasAttr("useOutlinerColor"):
-                    item.useOutlinerColor.set(True)
-                    item.outlinerColor.set(raw_color)
-
-    def _color_convert(self, hex_value, color_managed=False):
-        # Macro
-        srgb_to_linear = lambda x: x / 12.92 if x < 0.04045 else ((x + 0.055) / 1.055) ** 2.4
-
-        # 0-255
-        rgb = [int(hex_value[i: i + 2], 16) for i in [1, 3, 5]]
-
-        # 0-1
-        rgbf = [i / 255.0 for i in rgb]
-
-        cm_enabled = pm.colorManagementPrefs(query=True, cmEnabled=True)
-        # Note: maybe one day autodesk will provide us with the fucking libraries
-        cm_ocio_enabled = pm.colorManagementPrefs(query=True, cmConfigFileEnabled=True)
-
-        color = rgbf
-        if color_managed and cm_enabled:
-            if cm_ocio_enabled:
-                pm.warning("OCIO config enabled. 2.2 Gamma is being used")
-
-            return [srgb_to_linear(i) for i in color]
-
-        return color
+                if is_outliner and cmds.objExists(item + ".useOutlinerColor"):
+                    cmds.setAttr(item + ".useOutlinerColor", True)
+                    cmds.setAttr(item + ".outlinerColor", *raw_color)
 
 
 class ColorizeUI(object):

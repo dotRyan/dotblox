@@ -1,9 +1,11 @@
 from collections import defaultdict
 
-import pymel.core as pm
+from maya import cmds
+import maya.api.OpenMaya as om
 
+from dotblox.core import nodepath, mapi
 from dotblox.core.constant import AXIS, DIRECTION
-from dotblox.core.mutil import Undoable
+from dotblox.core.mutil import PreserveSelection, Undoable
 
 
 class MIRROR_AXIS():
@@ -13,17 +15,17 @@ class MIRROR_AXIS():
      ] = [x for x in range(3)]
 
 
-def poly_mirror(axis=AXIS.X,
+def poly_mirror(nodes=None,
+                axis=AXIS.X,
                 direction=DIRECTION.NEGATIVE,
-                mirror_axis=MIRROR_AXIS.OBJECT,
-                *nodes):
+                mirror_axis=MIRROR_AXIS.OBJECT):
     """Mirror geometry across an axis
 
     This method doesnt do anything fancy other than keep some
     settings consistent
 
     Args:
-        axi(str): x, y, z
+        axis(str): x, y, z
         direction: +:0, -:1
         mirror_axis: {
                         0: "Bounding Box",
@@ -31,8 +33,8 @@ def poly_mirror(axis=AXIS.X,
                         2: "World"
                     }
     """
-    if not nodes:
-        nodes = pm.ls(selection=True, long=True)
+    if nodes is None:
+        nodes = cmds.ls(selection=True, long=True)
 
     axis_map = {
         AXIS.X: 0,
@@ -45,19 +47,19 @@ def poly_mirror(axis=AXIS.X,
             raise RuntimeError("Axis \"%s\" not valid" % axis)
 
     for node in nodes:
-        pm.polyMirrorFace(node,
-                          cutMesh=True,
-                          axis=axis_map[axis],
-                          axisDirection=direction,
-                          mergeMode=1,  # Merge Border Vertices
-                          mirrorAxis=mirror_axis,
-                          mirrorPosition=0,
-                          mergeThresholdType=1,  # Merge Threshold custom
-                          mergeThreshold=0.001,
-                          flipUVs=False,
-                          smoothingAngle=30,
-                          constructionHistory=True,
-                          )
+        cmds.polyMirrorFace(node,
+                            cutMesh=True,
+                            axis=axis_map[axis],
+                            axisDirection=direction,
+                            mergeMode=1,  # Merge Border Vertices
+                            mirrorAxis=mirror_axis,
+                            mirrorPosition=0,
+                            mergeThresholdType=1,  # Merge Threshold custom
+                            mergeThreshold=0.001,
+                            flipUVs=False,
+                            smoothingAngle=30,
+                            constructionHistory=True,
+                            )
 
 
 class BevelEditor():
@@ -96,9 +98,9 @@ class BevelEditor():
         if src_node:
             node = src_node
 
-        history = node.listHistory()
+        history = map(nodepath.full_path, cmds.listHistory(node) or [])
 
-        return filter(lambda node: node.type().startswith("polyBevel"), history)
+        return filter(lambda node: cmds.nodeType(node).startswith("polyBevel"), history)
 
     @classmethod
     def show_bevel(cls, bevel_node):
@@ -111,76 +113,76 @@ class BevelEditor():
 
         """
         # Make sure the bevel node is hooked up to something
-        history = bevel_node.listHistory()
+        history = cmds.listHistory(bevel_node)
         if not history:
             raise RuntimeError("Bevel node has no history")
 
         # Last item in the history seems to be the active mesh
         last_item = history[-1]
-        if last_item.type() != "mesh":
+        if cmds.nodeType(last_item) != "mesh":
             raise RuntimeError("Unable to determine endpoint of bevel")
 
         # Always operate on the transform
-        src_node = last_item.getParent()
+        src_node = nodepath.parent(nodepath.full_path(last_item))
 
         # Find the input mesh of the bevel node. This is the mesh we want
         #   to display
-        input_mesh_connections = bevel_node.inputPolymesh.listConnections(plugs=True)
+        input_mesh_connections = cmds.listConnections(bevel_node + ".inputPolymesh", plugs=True) or []
         if not input_mesh_connections:
             raise RuntimeError("Unable to find input mesh on bevel")
         # Should only be 1 connection since maya does not allow multiple
         input_connection = input_mesh_connections[0]
 
         # Format name of the vis_node
-        vis_node_name = "{mesh}_bevel_vis".format(
-                mesh=src_node.name(),
-                bevel=bevel_node.name())
+        vis_node = "{mesh}_bevel_vis".format(
+                mesh=nodepath.leafname(src_node))
 
         # Offset the mesh only on creation
         offset = False
-        if not pm.objExists(vis_node_name):
-            vis_node = pm.createNode("transform", name=vis_node_name)
-            vis_mesh = pm.createNode("mesh",
-                                     parent=vis_node,
-                                     name=vis_node_name + "Shape")
+        if not cmds.objExists(vis_node):
+            vis_node = cmds.createNode("transform", name=vis_node)
+            vis_mesh = cmds.createNode("mesh",
+                                       parent=vis_node,
+                                       name=vis_node + "Shape")
             # Add custom attributes so we can find all the nodes
             #   associated with the current vis_node
-            vis_node.addAttr(cls.BEVEL_ATTR, type="message")
-            vis_node.addAttr(cls.NODE_ATTR, type="message")
+            cmds.addAttr(vis_node, longName=cls.BEVEL_ATTR, attributeType="message")
+            cmds.addAttr(vis_node, longName=cls.NODE_ATTR, attributeType="message")
             # Match the current transforms to the vis_node
-            vis_node.setMatrix(src_node.getMatrix(worldSpace=True))
-            pm.move(vis_node, [0, 0, 0], relative=True)
+            src_matrix = cmds.xform(src_node, query=True, matrix=True, worldSpace=True)
+            cmds.xform(vis_node, matrix=src_matrix, worldSpace=True)
             # Assign default shader
-            pm.sets("initialShadingGroup", vis_mesh, forceElement=True)
+            cmds.sets(vis_mesh, forceElement="initialShadingGroup")
             offset = True
         else:
-            vis_node = pm.PyNode(vis_node_name)
-            vis_mesh = vis_node.getShape()
+            vis_mesh = mapi.get_shape(vis_node)
 
-        bevel_attr = vis_node.attr(cls.BEVEL_ATTR)
-        node_attr = vis_node.attr(cls.NODE_ATTR)
-
+        node_attr = vis_node + "." + cls.NODE_ATTR
+        src_msg_attr = src_node + ".message"
         # Connect everything up so we can link back
-        if not src_node.message.isConnectedTo(node_attr):
-            src_node.message >> node_attr
-        if not src_node.message.isConnectedTo(bevel_attr):
-            bevel_node.message >> bevel_attr
+        if not cmds.isConnected(src_msg_attr, node_attr):
+            cmds.connectAttr(src_msg_attr, node_attr, force=True)
+
+        bevel_attr = vis_node + "." + cls.BEVEL_ATTR
+        bevel_msg_attr = bevel_node + ".message"
+        if not cmds.isConnected(bevel_msg_attr, bevel_attr):
+            cmds.connectAttr(bevel_msg_attr, bevel_attr, force=True)
 
         # Copy the bevel input mesh to the vis_mesh
-        input_connection >> vis_mesh.inMesh
+        cmds.connectAttr(input_connection, vis_mesh + ".inMesh")
         # TODO: figure out how to force a dgeval
         #       for now doing a refresh works.
         #       This may run like shit on a large scene
-        pm.refresh()
-        input_connection // vis_mesh.inMesh
+        cmds.refresh()
+        cmds.disconnectAttr(input_connection, vis_mesh + ".inMesh")
 
         # Offset the node from the src node
         if offset:
-            width = src_node.getBoundingBox().width()
-            pm.move(vis_node, [width * 1.25, 0, 0], relative=True)
+            bb = om.MFnDagNode(mapi.get_mobject(src_node)).boundingBox
+            cmds.move(bb.width * 1.25, 0, 0, vis_node, relative=True)
 
         # Select the new node.
-        vis_node.select()
+        cmds.select(vis_node)
 
         cls._colorize(vis_node)
         return vis_node
@@ -201,13 +203,13 @@ class BevelEditor():
             return []
         # Result is a list of indices [3, 0, 1, 4]
         # The first index is the length of edges in the array
-        current_edges = bevel_node.inputComponents.get() or []
+        current_edges = cmds.getAttr(bevel_node + ".inputComponents") or []
         if current_edges:
             # Remap to a pynode mesh edge
-            current_edges = [pm.MeshEdge(vis_node.getShape() + "." + edge)
+            current_edges = [vis_node + "." + edge
                              for edge in current_edges]
             if flatten:
-                current_edges = pm.ls(current_edges, flatten=True)
+                current_edges = cmds.ls(current_edges, flatten=True, long=True)
 
         return current_edges
 
@@ -223,33 +225,36 @@ class BevelEditor():
                 dict of each node associated with a set of each edge rather than .e[2:5]
         """
         if not components:
-            components = pm.ls(selection=True, flatten=True, long=True)
+            components = cmds.ls(selection=True, flatten=True, long=True)
         else:
-            components = pm.ls(components, flatten=True)
+            components = cmds.ls(components, flatten=True)
 
         face_map = defaultdict(set)
         edge_map = defaultdict(set)
 
         for component in components:
-            if isinstance(component, pm.MeshFace):
-                key = component.node().getParent()
+            key = nodepath.node(component)
+            # Faces
+            if cmds.filterExpand(component, sm=34):
                 face_map[key].add(component)
-            elif isinstance(component, pm.MeshEdge):
-                key = component.node().getParent()
+            # Edge
+            elif cmds.filterExpand(component, sm=32):
                 edge_map[key].add(component)
-            elif isinstance(component, pm.MeshVertex):
-                key = component.node().getParent()
-                for edge in component.connectedEdges():
+            # Vertex
+            elif cmds.filterExpand(component, sm=31):
+                edges = cmds.polyListComponentConversion(component,
+                                                         toEdge=True)
+                for edge in cmds.ls(edges, flatten=True, long=True):
                     edge_map[key].add(edge)
             else:
-                pm.displayWarning("Component not supported %s" % component)
+                cmds.warning("Component not supported %s" % component)
 
         # Get the edge perimeter of all the faces at once
         for node, face_map in face_map.iteritems():
-            edge_perimeter = pm.polyListComponentConversion(face_map,
-                                                            toEdge=True,
-                                                            border=True)
-            for edge in pm.ls(edge_perimeter, flatten=True):
+            edge_perimeter = cmds.polyListComponentConversion(face_map,
+                                                              toEdge=True,
+                                                              border=True)
+            for edge in cmds.ls(edge_perimeter, flatten=True, long=True):
                 edge_map[node].add(edge)
 
         return edge_map
@@ -269,19 +274,17 @@ class BevelEditor():
         for vis_node, selected_edges in edge_map.iteritems():
             # Make sure the node is a vis node
             if vis_node != cls.get_vis_node(vis_node):
-                pm.displayWarning("Node %s is not a vis node"
-                                  % vis_node.name(long=True))
+                cmds.warning("Node %s is not a vis node" % vis_node)
                 continue
             # Make sure there is a bevel node
             bevel_node = cls.get_vis_bevel(vis_node)
             if bevel_node is None:
-                pm.displayWarning("Node %s not supported"
-                                  % vis_node.name(long=True))
+                cmds.warning("Node %s not supported" % vis_node)
                 continue
 
             current_edges = cls.get_bevel_edges(bevel_node)
 
-            cls._set_edges(bevel_node, selected_edges, current_edges)
+            cls._set_edges(bevel_node, list(selected_edges), current_edges)
             cls._colorize(vis_node)
 
     @classmethod
@@ -300,14 +303,12 @@ class BevelEditor():
         for vis_node, selected_edges in edge_map.iteritems():
             # Make sure the node is a vis node
             if vis_node != cls.get_vis_node(vis_node):
-                pm.displayWarning("Node %s is not a vis node"
-                                  % vis_node.name(long=True))
+                cmds.warning("Node %s is not a vis node" % vis_node)
                 continue
             # Make sure there is a bevel node
             bevel_node = cls.get_vis_bevel(vis_node)
             if bevel_node is None:
-                pm.displayWarning("Node %s not supported"
-                                  % vis_node.name(long=True))
+                cmds.warning("Node %s not supported" % vis_node)
                 continue
             # get a flattened list so we can remove individual edges
             current_edges = cls.get_bevel_edges(bevel_node, flatten=True)
@@ -332,12 +333,14 @@ class BevelEditor():
             # Note: To optimize the list of edges let maya do its selection thing
             #   Edges are represented as .e[3:6]
             #  Maybe there is a better way to do this?
-            pm.select(*edges)
+            cmds.select(*edges)
             compressed_edges = []
-            for edge in pm.ls(selection=True):
-                compressed_edges.append(edge.name().split(".")[-1])
+            for edge in cmds.ls(selection=True, long=True):
+                compressed_edges.append(edge.split(".")[-1])
 
-        bevel_node.inputComponents.set([len(compressed_edges)] + compressed_edges)
+        cmds.setAttr(bevel_node + ".inputComponents",
+                     *[len(compressed_edges)] + compressed_edges,
+                     type="componentList")
 
     @classmethod
     def _colorize(cls, node):
@@ -349,15 +352,15 @@ class BevelEditor():
         """
         bevel_node = cls.get_vis_bevel(node)
         if bevel_node is None:
-            raise RuntimeError("Bevel not found on %s" % node.name(long=True))
+            raise RuntimeError("Bevel not found on %s" % node)
 
         edges = cls.get_bevel_edges(bevel_node)
         vis_node = cls.get_vis_node(node)
         # Remove the crease from all the edges
-        pm.polyCrease(vis_node.e, createHistory=False, value=0)
+        cmds.polyCrease(vis_node + ".e[:]", createHistory=False, value=0)
         # Set the crease of all the edges
         # value does not bolden the display in the viewport
-        pm.polyCrease(edges, createHistory=False, value=5)
+        cmds.polyCrease(edges, createHistory=False, value=5)
 
     @classmethod
     def get_vis_bevel(cls, node):
@@ -370,19 +373,19 @@ class BevelEditor():
             bevel node
         """
         # Given the vis_node get the connection to the bevel attribute
-        if node.hasAttr(cls.NODE_ATTR) and node.hasAttr(cls.BEVEL_ATTR):
-            connections = node.attr(cls.BEVEL_ATTR).listConnections()
-            return connections[0]
+        if len(cmds.ls(node + "." + cls.NODE_ATTR, node + "." + cls.NODE_ATTR)) == 2:
+            connections = cmds.listConnections(node + "." + cls.BEVEL_ATTR) or []
+            return nodepath.full_path(connections[0])
 
         # Loop through the attributes on both sides of the message connection
-        connections = node.message.listConnections(plugs=True)
+        connections = cmds.listConnections(node + ".message", plugs=True) or []
         for connection in connections:
             # Find the vis_node by checking if the connection has one of
             #   the custom attributes
-            if connection.attrName() in [cls.BEVEL_ATTR, cls.NODE_ATTR]:
+            if nodepath.attr(connection) in [cls.BEVEL_ATTR, cls.NODE_ATTR]:
                 # Recurse back knowing we have the vis node but it will
                 #   check but it will make sure it has both attributes
-                return cls.get_vis_bevel(connection.node())
+                return cls.get_vis_bevel(nodepath.full_path(nodepath.node(connection)))
 
     @classmethod
     def get_vis_node(cls, node):
@@ -395,18 +398,18 @@ class BevelEditor():
             vis node
         """
         # If we have both attributes then it is the vis_node
-        if node.hasAttr(cls.NODE_ATTR) and node.hasAttr(cls.BEVEL_ATTR):
+        if len(cmds.ls(node + "." + cls.NODE_ATTR, node + "." + cls.NODE_ATTR)) == 2:
             return node
 
         # Loop through the attributes on both sides of the message connection
-        connections = node.message.listConnections(plugs=True)
+        connections = cmds.listConnections(node + ".message", plugs=True) or []
         for connection in connections:
             # Find the vis_node by checking if the connection has one of
             #   the custom attributes
-            if connection.attrName() in [cls.BEVEL_ATTR, cls.NODE_ATTR]:
+            if nodepath.attr(connection) in [cls.BEVEL_ATTR, cls.NODE_ATTR]:
                 # Recurse back knowing we have the vis node but it will
                 #   check but it will make sure it has both attributes
-                return cls.get_vis_node(connection.node())
+                return cls.get_vis_node(nodepath.full_path(nodepath.node(connection)))
 
     @classmethod
     def get_src_node(cls, node):
@@ -419,19 +422,19 @@ class BevelEditor():
             src node
         """
         # Given the vis_node get the connection to the bevel attribute
-        if node.hasAttr(cls.NODE_ATTR) and node.hasAttr(cls.BEVEL_ATTR):
+        if len(cmds.ls(node + "." + cls.NODE_ATTR, node + "." + cls.NODE_ATTR)) == 2:
             # Find the vis_node by checking if the connection has one of
             #   the custom attributes
-            connections = node.attr(cls.NODE_ATTR).listConnections()
-            return connections[0]
+            connections = cmds.listConnections(node + "." + cls.NODE_ATTR) or []
+            return nodepath.full_path(connections[0])
 
         # Loop through the attributes on both sides of the message connection
-        connections = node.message.listConnections(plugs=True)
+        connections = cmds.listConnections(node + ".message", plugs=True) or []
         for connection in connections:
             # Recurse back knowing we have the vis node but it will
             #   check but it will make sure it has both attributes
-            if connection.attrName() in [cls.BEVEL_ATTR, cls.NODE_ATTR]:
-                return cls.get_src_node(connection.node())
+            if nodepath.attr(connection) in [cls.BEVEL_ATTR, cls.NODE_ATTR]:
+                return cls.get_src_node(nodepath.full_path(nodepath.node(connection)))
 
     @classmethod
     def remove_vis_bevel(cls, src_node):
@@ -442,6 +445,6 @@ class BevelEditor():
         """
         vis_node = cls.get_vis_node(src_node)
         if vis_node:
-            if vis_node in pm.ls(sl=True, long=True):
-                pm.select(src_node, add=True)
-            pm.delete(vis_node)
+            if vis_node in cmds.ls(selection=True, long=True):
+                cmds.select(src_node, add=True)
+            cmds.delete(vis_node)

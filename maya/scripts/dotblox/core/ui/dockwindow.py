@@ -2,7 +2,7 @@ import sys
 
 from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
 from PySide2 import QtWidgets, QtCore
-import pymel.core as pm
+from maya import cmds
 import maya.OpenMayaUI as omui
 
 
@@ -55,7 +55,7 @@ class DockWindow(MayaQWidgetDockableMixin, QtWidgets.QWidget):
                                            self.minimumSize().height())
 
         # See if maya is already aware of this workspace
-        self.startup_state = pm.workspaceControlState(self.workspace_control_name, query=True, exists=True)
+        self.startup_state = cmds.workspaceControlState(self.workspace_control_name, query=True, exists=True)
 
     # Unsure if all the size hint stuff is necessary but it enforces
 
@@ -123,15 +123,15 @@ if hasattr({source_module}, "{attr}"):
 
     def resize_workspace(self, width, height):
 
-        if not pm.workspaceControl(self.workspace_control_name, query=True, exists=True):
+        if not cmds.workspaceControl(self.workspace_control_name, query=True, exists=True):
             return
         try:
-            pm.workspaceControl(self.workspace_control_name, edit=True,
+            cmds.workspaceControl(self.workspace_control_name, edit=True,
                                 resizeWidth=width,
                                 resizeHeight=height)
             self.preferred_size = QtCore.QSize(width, height)
         except:
-            pm.displayWarning("Unable to resize workspace. This is only supported in 2018+")
+            cmds.warning("Unable to resize workspace. This is only supported in 2018+")
         self.resize(width, height)
 
     def delete_workspace(self):
@@ -139,9 +139,9 @@ if hasattr({source_module}, "{attr}"):
         This is primarily used when creating your own window since we retain
         the workspace when the window closes.
         """
-        if pm.workspaceControl(self.workspace_control_name, q=True, exists=True):
-            pm.workspaceControl(self.workspace_control_name, edit=True, cl=True)
-            pm.deleteUI(self.workspace_control_name, control=True)
+        if cmds.workspaceControl(self.workspace_control_name, q=True, exists=True):
+            cmds.workspaceControl(self.workspace_control_name, edit=True, cl=True)
+            cmds.deleteUI(self.workspace_control_name, control=True)
 
     @classmethod
     def create(cls, widget_cls, module_name, restore=False, window_options=None, attr="dock"):

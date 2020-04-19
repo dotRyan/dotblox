@@ -1,7 +1,7 @@
 import random
-from collections import defaultdict
 from PySide2 import QtCore, QtWidgets
-import pymel.core as pm
+
+from dotblox.core import nodepath
 from dotblox.core.modeling import BevelEditor
 from dotblox.core.ui import dockwindow
 from maya import cmds
@@ -18,7 +18,7 @@ class BevelEditorWidget(QtWidgets.QWidget):
         self.ui = BevelEditorUI()
         self.ui.setup_ui(self)
 
-        pm.scriptJob(event=["SelectionChanged", self.on_selection_changed],
+        cmds.scriptJob(event=["SelectionChanged", self.on_selection_changed],
                      parent=self.ui.bevel_combo.objectName())
         self.ui.bevel_combo.currentIndexChanged.connect(self.on_bevel_changed)
 
@@ -34,17 +34,16 @@ class BevelEditorWidget(QtWidgets.QWidget):
         # If there is a large selection and since we only care about
         # the last object. Use maya cmds so pymel doesnt wrap everything
         # and then wrap it ourselves
-        selection = cmds.ls(selection=True, long=True)
-        selection = cmds.ls(selection, long=True, objectsOnly=True, type=("transform", "mesh"))
+        selection = cmds.ls(selection=True, long=True, objectsOnly=True, type=("transform", "mesh"))
 
         if not selection:
             self.set_bevel_nodes()
             return
 
-        node = pm.PyNode(selection[-1])
+        node = selection[-1]
 
-        if node.type() == "mesh":
-            node = node.getParent()
+        if cmds.nodeType(node) == "mesh":
+            node = nodepath.parent(node)
 
         self.set_bevel_nodes(node)
 
@@ -66,7 +65,7 @@ class BevelEditorWidget(QtWidgets.QWidget):
         bevel_nodes = BevelEditor.get_bevel_nodes(node)
 
         if not bevel_nodes:
-            self.ui.bevel_combo.addItem("No bevels found on " + node.name())
+            self.ui.bevel_combo.addItem("No bevels found on " + nodepath.leafname(node))
             self.ui.bevel_combo.setEnabled(False)
             return
 
@@ -78,7 +77,7 @@ class BevelEditorWidget(QtWidgets.QWidget):
         for index, bevel_node in enumerate(bevel_nodes, 1):
             if current_vis_bevel == bevel_node:
                 current_bevel_index = index
-            self.ui.bevel_combo.addItem(bevel_node.name(),
+            self.ui.bevel_combo.addItem(nodepath.name(bevel_node),
                                         self.ui.ComboData(src_node, bevel_node))
         self.ui.bevel_combo.setCurrentIndex(current_bevel_index)
         self.ui.bevel_combo.blockSignals(False)
@@ -100,7 +99,7 @@ class BevelEditorWidget(QtWidgets.QWidget):
 
     @Repeatable()
     def on_select_edges_click(self):
-        selection = pm.ls(sl=True, objectsOnly=True)
+        selection = cmds.ls(selection=True, objectsOnly=True, long=True)
         edges = []
         for node in selection:
             bevel_node = BevelEditor.get_vis_bevel(node)
@@ -108,21 +107,21 @@ class BevelEditorWidget(QtWidgets.QWidget):
                 edges.append(BevelEditor.get_bevel_edges(bevel_node))
 
         if edges:
-            pm.select(cl=True)
-            pm.select(pm.ls(edges, objectsOnly=True))
-            pm.runtime.SelectEdgeMask()
-            pm.select(edges)
+            cmds.select(clear=True)
+            cmds.select(cmds.ls(*edges, objectsOnly=True))
+            cmds.SelectEdgeMask()
+            cmds.select(*edges)
 
     @Repeatable()
     def remove_from_selected(self):
-        selection = pm.ls(selection=True, long=True)
+        selection = cmds.ls(selection=True, long=True)
         for node in selection:
             src_node = BevelEditor.get_src_node(node)
             if src_node:
                 BevelEditor.remove_vis_bevel(src_node)
 
     def remove_from_all(self):
-        nodes = pm.ls("*." + BevelEditor.BEVEL_ATTR, objectsOnly=True, type="transform")
+        nodes = cmds.ls("*." + BevelEditor.BEVEL_ATTR, objectsOnly=True, type="transform")
         for node in nodes:
             src_node = BevelEditor.get_src_node(node)
             if src_node:

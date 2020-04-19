@@ -17,7 +17,11 @@ over and over again or have had to send to various people.
 [![Wiki](https://img.shields.io/badge/Site:-Wiki-3C1759?style=flat-square)](https://wiki.dotryan.com/cheatsheet)
 
 ## Index
-- [Maya](docs/maya/maya.md)
+- [Change Log](CHANGELOG.md)
+- **DCC's**
+  - [Maya](docs/maya/maya.md)
+
+
 
 ## Me
 I have been in the vfx industry since 2013 and currently a **Pipeline TD**  at 

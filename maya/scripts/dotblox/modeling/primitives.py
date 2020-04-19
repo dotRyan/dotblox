@@ -1,8 +1,9 @@
+from maya import cmds
+from PySide2 import QtWidgets, QtCore, QtGui
+
 from dotblox.core import general
 from dotblox.core.mutil import OptionVar, Undoable
 from dotblox.core.ui import dockwindow
-from PySide2 import QtWidgets, QtCore, QtGui
-import pymel.core as pm
 
 __author__ = "Ryan Robinson"
 
@@ -48,9 +49,9 @@ class PrimitivesWidget(QtWidgets.QWidget):
     @Undoable()
     def _make_primitive(self, primitive, divisions):
 
-        selection = pm.ls(selection=True)
-        components = pm.filterExpand(selection, sm=(31, 32, 34, 35))
-        component_objects = list(set(pm.ls(components, objectsOnly=True)))
+        selection = cmds.ls(selection=True, long=True)
+        components = cmds.filterExpand(selection, sm=(31, 32, 34, 35), fullPath=True)
+        component_objects = list(set(cmds.ls(components, objectsOnly=True, long=True)))
 
         # Only snap if the len of nodes is 1 and the selection is a component
         snap = len(component_objects) == 1 and components
@@ -60,18 +61,18 @@ class PrimitivesWidget(QtWidgets.QWidget):
             tool_position = general.get_tool_pivot_position()
 
         if primitive == PRIMITIVE.SPHERE:
-            node, _ = pm.polySphere(subdivisionsAxis=divisions,
+            node, _ = cmds.polySphere(subdivisionsAxis=divisions,
                                     subdivisionsHeight=divisions)
         elif primitive == PRIMITIVE.CUBE:
-            node, _ = pm.polyCube(subdivisionsWidth=divisions,
+            node, _ = cmds.polyCube(subdivisionsWidth=divisions,
                                   subdivisionsHeight=divisions,
                                   subdivisionsDepth=divisions)
         elif primitive == PRIMITIVE.CYLINDER:
-            node, _ = pm.polyCylinder(subdivisionsAxis=divisions,
+            node, _ = cmds.polyCylinder(subdivisionsAxis=divisions,
                                       subdivisionsHeight=1,
                                       subdivisionsCaps=1)
         elif primitive == PRIMITIVE.PLANE:
-            node, _ = pm.polyPlane(subdivisionsWidth=divisions,
+            node, _ = cmds.polyPlane(subdivisionsWidth=divisions,
                                    subdivisionsHeight=divisions)
         else:
             raise RuntimeError("Primative not supported")
@@ -81,25 +82,22 @@ class PrimitivesWidget(QtWidgets.QWidget):
 
     @Undoable()
     def _snap_selection(self):
-        selection = pm.ls(selection=True, long=True)
-        components = pm.ls(pm.filterExpand(selection, sm=(31, 32, 34, 35)))
-        component_objects = list(set(pm.ls(components, objectsOnly=True)))
+        selection = cmds.ls(selection=True, long=True)
+        components = cmds.filterExpand(selection, sm=(31, 32, 34, 35), fullPath=True)
+        component_objects = list(set(cmds.ls(components, objectsOnly=True, long=True)))
 
         # Only snap if the len of nodes is 1 and the selection is a component
-
-        # Only snap if the len of nodes is 1 abd the selection is a component
-
         if len(component_objects) != 1:
-            pm.displayError("Too many objects with components selected. "
+            cmds.warning("Too many objects with components selected. "
                             "Please Select only 1 objects components")
             return
 
-        pm.select(components)
+        cmds.select(components)
         tool_position = general.get_tool_pivot_position()
-        nodes = pm.ls(set(selection) - set(components), type="transform")
+        nodes = cmds.ls(list(set(selection) - set(components)), type="transform")
         for node in nodes:
             general.snap_to_mesh_face(component_objects[0], node, point=tool_position)
-        pm.select(nodes)
+        cmds.select(nodes)
 
 
 class PrimitivesWidgetUI(object):
