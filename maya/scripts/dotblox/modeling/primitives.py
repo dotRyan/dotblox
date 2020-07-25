@@ -1,3 +1,4 @@
+from dotblox.core.constant import AXIS, DIRECTION
 from maya import cmds
 from PySide2 import QtWidgets, QtCore, QtGui
 
@@ -34,16 +35,17 @@ class PrimitivesWidget(QtWidgets.QWidget):
 
         self.ui.sphere_btn.clicked.connect(
                 lambda: self._make_primitive(PRIMITIVE.SPHERE,
-                                             self.ui.sphere_btn.activeDivision()))
+                                             self.ui.sphere_btn.activeOption()))
         self.ui.cube_btn.clicked.connect(
                 lambda: self._make_primitive(PRIMITIVE.CUBE,
-                                             self.ui.cube_btn.activeDivision()))
+                                             self.ui.cube_btn.activeOption()))
         self.ui.cylinder_btn.clicked.connect(
                 lambda: self._make_primitive(PRIMITIVE.CYLINDER,
-                                             self.ui.cylinder_btn.activeDivision()))
+                                             self.ui.cylinder_btn.activeOption()))
         self.ui.plane_btn.clicked.connect(
                 lambda: self._make_primitive(PRIMITIVE.PLANE,
-                                             self.ui.plane_btn.activeDivision()))
+                                             self.ui.plane_btn.activeOption()))
+
         self.ui.snap_btn.clicked.connect(self._snap_selection)
 
     @Undoable()
@@ -82,6 +84,12 @@ class PrimitivesWidget(QtWidgets.QWidget):
 
     @Undoable()
     def _snap_selection(self):
+        option = self.ui.snap_btn.activeOption()
+
+        direction = DIRECTION.NEGATIVE if "-" in option else DIRECTION.POSITIVE
+        axis = getattr(AXIS, option.strip("-").upper())
+
+
         selection = cmds.ls(selection=True, long=True)
         components = cmds.filterExpand(selection, sm=(31, 32, 34, 35), fullPath=True)
         component_objects = list(set(cmds.ls(components, objectsOnly=True, long=True)))
@@ -96,7 +104,11 @@ class PrimitivesWidget(QtWidgets.QWidget):
         tool_position = general.get_tool_pivot_position()
         nodes = cmds.ls(list(set(selection) - set(components)), type="transform")
         for node in nodes:
-            general.snap_to_mesh_face(component_objects[0], node, point=tool_position)
+            general.snap_to_mesh_face(component_objects[0],
+                                      node,
+                                      point=tool_position,
+                                      up_axis=axis,
+                                      direction=direction)
         cmds.select(nodes)
 
 
@@ -107,22 +119,30 @@ class PrimitivesWidgetUI(object):
         main_layout.setAlignment(QtCore.Qt.AlignLeft)
 
         self.sphere_btn = ToolButton(PRIMITIVE.SPHERE , ":polySphere.png")
-        self.sphere_btn.setDivisions([8, 16, 24, 32, 64], 16)
+        self.sphere_btn.setOptions([8, 16, 24, 32, 64],
+                                   default=16,
+                                   label="Divisions")
         main_layout.addWidget(self.sphere_btn)
 
         self.cube_btn = ToolButton(PRIMITIVE.CUBE , ":polyCube.png")
-        self.cube_btn.setDivisions([1, 2, 3, 4])
+        self.cube_btn.setOptions([1, 2, 3, 4], label="Divisions")
         main_layout.addWidget(self.cube_btn)
 
         self.cylinder_btn = ToolButton(PRIMITIVE.CYLINDER , ":polyCylinder.png")
-        self.cylinder_btn.setDivisions([8, 16, 24, 32, 64], 16)
+        self.cylinder_btn.setOptions([8, 16, 24, 32, 64],
+                                     default=16,
+                                     label="Divisions")
         main_layout.addWidget(self.cylinder_btn)
 
         self.plane_btn = ToolButton(PRIMITIVE.PLANE, ":polyMesh.png")
-        self.plane_btn.setDivisions([1, 2, 3, 4])
+        self.plane_btn.setOptions([1, 2, 3, 4], label="Divisions")
         main_layout.addWidget(self.plane_btn)
 
-        self.snap_btn = FlatToolButton(":snapPlane_200.png")
+        self.snap_btn = ToolButton("Snap", ":snapPlane_200.png")
+        self.snap_btn.setOptions(["x", "y", "z", "-x", "-y", "-z"],
+                                 default="y",
+                                 label="Direction")
+
         main_layout.addWidget(self.snap_btn)
 
         parent.setLayout(main_layout)
@@ -142,33 +162,36 @@ class ToolButton(FlatToolButton):
         # The if the first item in a menu is a separator it seems not
         # wanna draw. But setting collapsible false seems to fix
         self._context_menu.setSeparatorsCollapsible(False)
-        self._context_menu.addSeparator().setText("Divisions")
+
         self._label = label
-        self._divisions = {}
-        self._active_division = None
+        self._options = {}
+        self._active_option = None
 
-    def setDivisions(self, divisions, default=None):
+    def setOptions(self, options, default=None, label=None):
         if default is None:
-            default = divisions[0]
+            default = options[0]
 
-        divisions = list(divisions)
-        for div in sorted(divisions):
-            self._divisions[div] = self._context_menu.addAction(
-                    str(div),
-                    lambda x=div: self._on_division_selected(x))
+        if label is not None:
+            self._context_menu.addSeparator().setText(label)
+
+        options = list(options)
+        for option in options:
+            self._options[option] = self._context_menu.addAction(
+                    str(option),
+                    lambda x=option: self._on_option_selected(x))
         value = option_var.get(self._label, default)
-        self.setActiveDivision(value)
+        self.setActiveOption(value)
 
-    def setActiveDivision(self, div):
-        self._active_division = div
-        option_var.set(self._label, div)
+    def setActiveOption(self, option):
+        self._active_option = option
+        option_var.set(self._label, option)
         self.repaint()
 
-    def activeDivision(self):
-        return self._active_division
+    def activeOption(self):
+        return self._active_option
 
-    def _on_division_selected(self, division):
-        self.setActiveDivision(division)
+    def _on_option_selected(self, division):
+        self.setActiveOption(division)
         self.clicked.emit()
 
     def mousePressEvent(self, event):
@@ -183,7 +206,7 @@ class ToolButton(FlatToolButton):
         rect = event.rect()
         painter = QtGui.QPainter(self)
         painter.drawText(rect.adjusted(0, 0, -4, -4), QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom,
-                         str(self._active_division) or "")
+                         str(self._active_option) or "")
 
 
 dock = dockwindow.DockWindowManager(PrimitivesWidget)
