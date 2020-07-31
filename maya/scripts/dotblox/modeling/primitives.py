@@ -1,4 +1,5 @@
 from dotblox.core.constant import AXIS, DIRECTION
+from dotbloxlib.icon import get_icon
 from maya import cmds
 from PySide2 import QtWidgets, QtCore, QtGui
 
@@ -118,27 +119,27 @@ class PrimitivesWidgetUI(object):
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setAlignment(QtCore.Qt.AlignLeft)
 
-        self.sphere_btn = ToolButton(PRIMITIVE.SPHERE , ":polySphere.png")
+        self.sphere_btn = ToolButton(PRIMITIVE.SPHERE , get_icon("dblx_polySphere"))
         self.sphere_btn.setOptions([8, 16, 24, 32, 64],
                                    default=16,
                                    label="Divisions")
         main_layout.addWidget(self.sphere_btn)
 
-        self.cube_btn = ToolButton(PRIMITIVE.CUBE , ":polyCube.png")
+        self.cube_btn = ToolButton(PRIMITIVE.CUBE , get_icon("dblx_polyCube"))
         self.cube_btn.setOptions([1, 2, 3, 4], label="Divisions")
         main_layout.addWidget(self.cube_btn)
 
-        self.cylinder_btn = ToolButton(PRIMITIVE.CYLINDER , ":polyCylinder.png")
+        self.cylinder_btn = ToolButton(PRIMITIVE.CYLINDER , get_icon("dblx_polyCylinder"))
         self.cylinder_btn.setOptions([8, 16, 24, 32, 64],
                                      default=16,
                                      label="Divisions")
         main_layout.addWidget(self.cylinder_btn)
 
-        self.plane_btn = ToolButton(PRIMITIVE.PLANE, ":polyMesh.png")
+        self.plane_btn = ToolButton(PRIMITIVE.PLANE, get_icon("dblx_polyMesh"))
         self.plane_btn.setOptions([1, 2, 3, 4], label="Divisions")
         main_layout.addWidget(self.plane_btn)
 
-        self.snap_btn = ToolButton("Snap", ":snapPlane_200.png")
+        self.snap_btn = ToolButton("Snap", get_icon("dblx_snap"))
         self.snap_btn.setOptions(["x", "y", "z", "-x", "-y", "-z"],
                                  default="y",
                                  label="Direction")
