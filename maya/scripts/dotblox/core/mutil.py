@@ -120,13 +120,14 @@ class Repeatable():
         for command in Repeatable.history.values()[:]:
             if command.label not in repeat_history:
                 del Repeatable.history[command.id_]
-
-    for job in cmds.scriptJob(listJobs=True):
-        if _clean_dotbox_repeatable_history.__name__ in job:
-            job_id = int(job.split(":")[0])
-            cmds.scriptJob(kill=job_id)
-            break
-    SCRIPT_JOB = cmds.scriptJob(event=["RecentCommandChanged", _clean_dotbox_repeatable_history])
+    # Maya may not be initialized if running from mayapy
+    if "scriptJob" in dir(cmds):
+        for job in cmds.scriptJob(listJobs=True):
+            if _clean_dotbox_repeatable_history.__name__ in job:
+                job_id = int(job.split(":")[0])
+                cmds.scriptJob(kill=job_id)
+                break
+        SCRIPT_JOB = cmds.scriptJob(event=["RecentCommandChanged", _clean_dotbox_repeatable_history])
 
     class RepeatableCommand():
         def __init__(self, func, args=(), kwargs={}):
