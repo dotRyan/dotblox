@@ -8,16 +8,24 @@ def test_action():
 
 
 def test(app, win, layout):
-    win.setWindowTitle("WidgetToolButton Test")
+    win.setWindowTitle("FlatToolButton Test")
     win.resize(128, 64)
     layout.setContentsMargins(0, 0, 0, 0)
+    h_layout = QtWidgets.QHBoxLayout()
 
     style = win.style()
 
     btn = FlatToolButton(icon=style.standardIcon(style.SP_DirIcon))
     btn.clicked.connect(test_action)
+    h_layout.addWidget(btn)
 
-    layout.addWidget(btn)
+    btn = FlatToolButton(icon=style.standardIcon(style.SP_DirIcon))
+    btn.setEnabled(False)
+    btn.clicked.connect(test_action)
+    h_layout.addWidget(btn)
+
+    layout.addLayout(h_layout)
 
 
-standaloneqt.run_as_window(test)
+if __name__ == '__main__':
+    standaloneqt.run_as_window(test)
