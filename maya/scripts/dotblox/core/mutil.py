@@ -1,6 +1,19 @@
 import maya.cmds as cmds
 import hashlib
 
+from PySide2 import QtWidgets
+from maya import OpenMayaUI as omui1
+from shiboken2 import getCppPointer, wrapInstance
+
+
+def get_qt_fullname(widget):
+    return omui1.MQtUtil.fullName(getCppPointer(widget)[0])
+
+
+def maya_main_window():
+    maya_main_window = omui1.MQtUtil.mainWindow()
+    return wrapInstance(long(maya_main_window), QtWidgets.QMainWindow)
+
 
 class PreserveSelection(object):
     """
