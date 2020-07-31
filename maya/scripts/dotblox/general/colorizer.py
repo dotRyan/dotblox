@@ -181,7 +181,7 @@ class ColorizerWidget(QtWidgets.QWidget):
 
         selection = cmds.ls(selection=True, long=True)
 
-        for item in selection:  # type: pm.PyNode
+        for item in selection:
             if self.is_object and cmds.objExists(item + ".overrideEnabled"):
                 # TODO: do we turn this off?
                 #       how do we know the only change was made to the color

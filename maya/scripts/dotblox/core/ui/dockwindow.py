@@ -252,7 +252,7 @@ class DockWindowManager(object):
         This can also be used while debugging.
         """
         if not self.win:
-            pm.displayWarning("Window instance has already been "
+            cmds.warning("Window instance has already been "
                        "deleted for %s" % self._widget_cls.__name__)
 
         # Workspace is already handled if its not retained
