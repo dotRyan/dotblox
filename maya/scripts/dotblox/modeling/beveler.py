@@ -20,6 +20,8 @@ class BevelEditorWidget(QtWidgets.QWidget):
 
         cmds.scriptJob(event=["SelectionChanged", self.on_selection_changed],
                      parent=self.ui.bevel_combo.objectName())
+        cmds.scriptJob(event=["SelectModeChanged", self.on_selection_changed],
+                     parent=self.ui.bevel_combo.objectName())
         self.ui.bevel_combo.currentIndexChanged.connect(self.on_bevel_changed)
 
         self.ui.add_btn.clicked.connect(self.on_add_clicked)
@@ -35,6 +37,7 @@ class BevelEditorWidget(QtWidgets.QWidget):
         # the last object. Use maya cmds so pymel doesnt wrap everything
         # and then wrap it ourselves
         selection = cmds.ls(selection=True, long=True, objectsOnly=True, type=("transform", "mesh"))
+        selection += cmds.ls(hilite=True, long=True, dagObjects=True, type="mesh", noIntermediate=True)
 
         if not selection:
             self.set_bevel_nodes()
