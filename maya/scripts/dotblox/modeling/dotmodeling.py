@@ -3,6 +3,7 @@ from dotblox.core.ui import dockwindow
 from dotblox.general.pivoting import PivotingWidget
 from dotblox.modeling.mirrorer import MirrorerWidget
 from dotblox.modeling.primitives import PrimitivesWidget
+from dotbloxlib.icon import get_icon
 from dotbloxlib.qt.framewidget import FrameWidget
 from dotbloxlib.qt.widgettoolbutton import WidgetToolButton
 
@@ -35,8 +36,8 @@ class DotModelingWidgetUI(object):
         layout = QtWidgets.QHBoxLayout()
         layout.setAlignment(QtCore.Qt.AlignLeft)
 
-        self.pivot_tool_btn = WidgetToolButton(PivotingWidget(), icon=":CenterPivot.png")
-        self.mirror_tool_btn = WidgetToolButton(MirrorerWidget(), icon=":polyMirrorGeometry.png")
+        self.pivot_tool_btn = WidgetToolButton(PivotingWidget(), icon=get_icon("dblx_pivot"))
+        self.mirror_tool_btn = WidgetToolButton(MirrorerWidget(), icon=get_icon("dblx_polyMirror"))
 
         layout.addWidget(self.mirror_tool_btn)
         layout.addWidget(self.pivot_tool_btn)
