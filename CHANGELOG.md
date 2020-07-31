@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - [beta]: this branch has the latest changes; these commits may be overwritten.
 
+## [1.1.0] - TBD
+### Changed
+- New icons; tools are updated to use them
+- `dotbloxlib.config` module for future tool configurations
+- `FlatToolButton` now highlights on hover
+- [Primitives] tool can now choose axis for selected items
+
+
 ## [1.0.0] - 2020-05-12
 ### Changed
 - New structure of code base
