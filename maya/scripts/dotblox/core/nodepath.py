@@ -62,7 +62,10 @@ def parent(node):
     Returns:
         str: node path
     """
-    return __underworld_filter(node.rsplit("|", 1)[0])
+    result = __underworld_filter(node.rsplit("|", 1)[0])
+    if not result and node.startswith("|"):
+        return "|"
+    return result
 
 
 def node(node):
