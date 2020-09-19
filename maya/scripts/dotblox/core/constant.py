@@ -15,6 +15,7 @@ class AXIS():
     X = "x"
     Y = "y"
     Z = "z"
+    N = "normal"
 
 class DIRECTION():
     """Most Maya tools use this as the settings which gets confusing.
