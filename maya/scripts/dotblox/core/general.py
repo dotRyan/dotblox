@@ -107,13 +107,11 @@ def get_face_rotation(mesh_face, up_axis=AXIS.Y, direction=DIRECTION.POSITIVE):
     if len(cmds.ls(mesh_face, flatten=True)) != 1:
         raise RuntimeError("Given mesh_face must be a single index got \"%s\"" % mesh_face)
 
-    mobj = mapi.get_mobject(mesh_face)
-    component = mapi.get_component_mobject(mesh_face)
+    mdag_path, component = mapi.get_component_mobject(mesh_face)
 
     comp_fn = om.MFnSingleIndexedComponent(component)
     face_id = comp_fn.element(0)
 
-    mdag_path = om.MDagPath.getAPathTo(mobj)
     face_it = om.MItMeshPolygon(mdag_path)
     face_it.setIndex(face_id)
     mesh_fn = om.MFnMesh(mdag_path)

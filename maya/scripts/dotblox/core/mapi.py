@@ -32,8 +32,8 @@ def get_component_mobject(component):
     selection = om.MSelectionList()
     selection.add(component)
     if selection.length():
-        _, comp = selection.getComponent(0)
-        return comp
+        dag_path, comp = selection.getComponent(0)
+        return dag_path, comp
 
 
 def get_shape(node):
