@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - [beta]: this branch has the latest changes; these commits may be overwritten.
 
+## [1.1.0] - 2021-02-10
+### New
+- Icons added; `get_icon` function
+- Added Axis.N for normal support
+- `dotbloxlib.config` module for future tool configurations
+
+### Changed
+- [Primitives] tool can now choose axis for selected items
+- `get_component_mobject` signature has changed for simplicity
+
+### Fix
+- `FlatToolButton` now highlights on hover
+- `nodepath` handles underworld nodes
+- remove shelve from `dotblox.mod` due to issues with local batch rendering
+
+
 ## [1.0.0] - 2020-05-12
 ### Changed
 - New structure of code base
@@ -38,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [beta]: https://github.com/dotRyan/dotblox/compare/master...beta
+[1.1.0]: https://github.com/dotRyan/dotblox/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/dotRyan/dotblox/compare/v0.1.1...v1.0.0
 [0.1.1]: https://github.com/dotRyan/dotblox/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/dotRyan/dotblox/releases/tag/v0.1.0
