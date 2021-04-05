@@ -1,11 +1,11 @@
 from PySide2 import QtCore, QtWidgets
-from dotblox.core.ui import dockwindow
-from dotblox.general.pivoting import PivotingWidget
-from dotblox.modeling.mirrorer import MirrorerWidget
-from dotblox.modeling.primitives import PrimitivesWidget
-from dotbloxlib.icon import get_icon
-from dotbloxlib.qt.framewidget import FrameWidget
-from dotbloxlib.qt.widgettoolbutton import WidgetToolButton
+from dotbloxmaya.core.ui import dockwindow
+from dotbloxmaya.general.pivoting import PivotingWidget
+from dotbloxmaya.modeling.mirrorer import MirrorerWidget
+from dotbloxmaya.modeling.primitives import PrimitivesWidget
+from dotblox.icon import get_icon
+from dotblox.qt.framewidget import FrameWidget
+from dotblox.qt.widgettoolbutton import WidgetToolButton
 
 __author__ = "Ryan Robinson"
 

@@ -3,14 +3,13 @@
 
 from maya import cmds
 from PySide2 import QtWidgets, QtCore, QtGui
-from dotblox.core.mutil import OptionVar
 
-from dotblox.core.mutil import OptionVar
-from dotblox.core.ui import dockwindow
+from dotbloxmaya.core.mutil import OptionVar
+from dotbloxmaya.core.ui import dockwindow
 
-from dotbloxlib import color as colorlib
-from dotblox.core import color as colorm
-from dotbloxlib.color import mdc
+from dotblox import color as colorlib
+from dotbloxmaya.core import color as colorm
+from dotblox.color import mdc
 
 
 class PALETTE_MODES():

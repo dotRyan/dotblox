@@ -2,7 +2,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 __author__ = "Ryan Robinson"
 
-from dotbloxlib.qt.flattoolbutton import FlatToolButton
+from dotblox.qt.flattoolbutton import FlatToolButton
 
 
 class WidgetToolButton(FlatToolButton):

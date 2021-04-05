@@ -1,6 +1,6 @@
 from PySide2 import QtCore, QtWidgets
-from dotbloxlib.qt import standaloneqt
-from dotbloxlib.qt.flattoolbutton import FlatToolButton
+from dotblox.qt import standaloneqt
+from dotblox.qt.flattoolbutton import FlatToolButton
 
 
 def test_action():

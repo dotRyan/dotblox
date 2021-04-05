@@ -1,4 +1,4 @@
-from dotbloxlib.color import materialdesigncolors as mdc
+from dotblox.color import materialdesigncolors as mdc
 
 
 def color_hex_to_rgbf(hex_color):

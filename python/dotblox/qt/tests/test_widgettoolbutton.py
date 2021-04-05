@@ -1,6 +1,6 @@
 from PySide2 import QtCore, QtWidgets
-from dotbloxlib.qt import framewidget, standaloneqt
-from dotbloxlib.qt.widgettoolbutton import WidgetToolButton
+from dotblox.qt import framewidget, standaloneqt
+from dotblox.qt.widgettoolbutton import WidgetToolButton
 
 
 def test_action():

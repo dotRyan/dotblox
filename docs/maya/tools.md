@@ -9,8 +9,10 @@ Colorize objects using [material design colors](https://material.io/design/color
 
 Applies to `display layers`, `objects` and the `outliner`
 ###### Run
+
 ```python
-from dotblox.general import colorizer
+from dotbloxmaya import colorizer
+
 colorizer.dock.show()
 ```
 
@@ -19,8 +21,11 @@ Move the pivot relative to the bounding box
 ![img](./img/pivoting.png)
 
 ###### Run
+
 ```python
-from dotblox.general import pivoting
+
+from dotbloxmaya.general import pivoting
+
 pivoting.dock.show()
 ```
 
@@ -32,8 +37,10 @@ Edit bevel history on the selected mesh.
 ![img](./img/beveler.png)
 
 ###### Run
+
 ```python
-from dotblox.modeling import beveler
+from dotbloxmaya import beveler
+
 beveler.dock.show()
 ````
 
@@ -42,8 +49,11 @@ One window for primatives, mirrorer and pivoting
 ![img](./img/dotmodeling.png)
 
 ###### Run
+
 ```python
-from dotblox.modeling import dotmodeling
+
+from dotbloxmaya.modeling import dotmodeling
+
 dotmodeling.dock.show()
 ````
 
@@ -52,8 +62,10 @@ Mirror geometry across the `world pivot`, `object pivot` or the `bounding box`
 ![img](./img/mirror.png)
 
 ###### Run
+
 ```python
-from dotblox.modeling import mirrorer
+from dotbloxmaya import mirrorer
+
 mirrorer.dock.show()
 ```
 
@@ -63,7 +75,9 @@ Optionally select a face and move the selected objects
 ![img](./img/primatives.png)
 
 ###### Run
+
 ```python
-from dotblox.modeling import primitives
+from dotbloxmaya import primitives
+
 primitives.dock.show()
 ```

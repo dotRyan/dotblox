@@ -1,10 +1,10 @@
-from dotblox.core.constant import AXIS, DIRECTION
-from dotblox.core.ui import dockwindow
+from dotbloxmaya.core.constant import AXIS, DIRECTION
+from dotbloxmaya.core.ui import dockwindow
 from PySide2 import QtWidgets, QtCore, QtGui
 
 
-from dotblox.core.mutil import Repeatable, Undoable, OptionVar
-from dotblox.core.modeling import poly_mirror
+from dotbloxmaya.core.mutil import Repeatable, Undoable, OptionVar
+from dotbloxmaya.core.modeling import poly_mirror
 
 __author__ = "Ryan Robinson"
 

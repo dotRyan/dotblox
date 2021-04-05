@@ -1,12 +1,12 @@
 import random
 from PySide2 import QtCore, QtWidgets
 
-from dotblox.core import nodepath
-from dotblox.core.modeling import BevelEditor
-from dotblox.core.ui import dockwindow
+from dotbloxmaya.core import nodepath
+from dotbloxmaya.core.modeling import BevelEditor
+from dotbloxmaya.core.ui import dockwindow
 from maya import cmds
 
-from dotblox.core.mutil import Repeatable
+from dotbloxmaya.core.mutil import Repeatable
 
 
 class BevelEditorWidget(QtWidgets.QWidget):
