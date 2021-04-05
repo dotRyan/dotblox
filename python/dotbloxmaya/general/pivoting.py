@@ -1,9 +1,9 @@
 from maya import cmds
 from PySide2 import QtWidgets, QtCore, QtGui
 
-from dotblox.core.ui import dockwindow
-from dotblox.core.general import pivot_to_bb
-from dotblox.core.constant import AXIS, DIRECTION
+from dotbloxmaya.core.ui import dockwindow
+from dotbloxmaya.core.general import pivot_to_bb
+from dotbloxmaya.core.constant import AXIS, DIRECTION
 
 
 class COLORS():

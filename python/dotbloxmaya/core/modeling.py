@@ -3,9 +3,9 @@ from collections import defaultdict
 from maya import cmds
 import maya.api.OpenMaya as om
 
-from dotblox.core import nodepath, mapi
-from dotblox.core.constant import AXIS, DIRECTION
-from dotblox.core.mutil import PreserveSelection, Undoable
+from dotbloxmaya.core import nodepath, mapi
+from dotbloxmaya.core.constant import AXIS, DIRECTION
+from dotbloxmaya.core.mutil import PreserveSelection, Undoable
 
 
 class MIRROR_AXIS():

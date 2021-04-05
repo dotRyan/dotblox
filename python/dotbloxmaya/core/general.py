@@ -3,8 +3,8 @@ import math
 from maya import cmds
 import maya.api.OpenMaya as om
 
-from dotblox.core import mapi, nodepath
-from dotblox.core.constant import AXIS, DIRECTION
+from dotbloxmaya.core import mapi
+from dotbloxmaya.core.constant import AXIS, DIRECTION
 
 
 def pivot_to_bb(nodes=None, axis=AXIS.Y, direction=DIRECTION.NEGATIVE, center=False):

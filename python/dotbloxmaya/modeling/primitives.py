@@ -1,15 +1,15 @@
-from dotblox.core.constant import AXIS, DIRECTION
-from dotbloxlib.icon import get_icon
+from dotbloxmaya.core.constant import AXIS, DIRECTION
+from dotblox.icon import get_icon
 from maya import cmds
 from PySide2 import QtWidgets, QtCore, QtGui
 
-from dotblox.core import general
-from dotblox.core.mutil import OptionVar, Undoable
-from dotblox.core.ui import dockwindow
+from dotbloxmaya.core import general
+from dotbloxmaya.core.mutil import OptionVar, Undoable
+from dotbloxmaya.core.ui import dockwindow
 
 __author__ = "Ryan Robinson"
 
-from dotbloxlib.qt.flattoolbutton import FlatToolButton
+from dotblox.qt.flattoolbutton import FlatToolButton
 
 class PRIMITIVE():
     PLANE = "plane"

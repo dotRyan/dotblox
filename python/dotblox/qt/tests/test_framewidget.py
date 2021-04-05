@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtWidgets
-from dotbloxlib.qt import framewidget, standaloneqt
+from dotblox.qt import framewidget, standaloneqt
 
 
 def test(app, win, layout):
