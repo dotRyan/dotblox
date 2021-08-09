@@ -5,7 +5,7 @@ import sys
 
 
 class ConfigIO(object):
-    def __init__(self, file_path, read, write, default=None, sync=False):
+    def __init__(self, file_path, read, write, default=None, sync=True):
         """File IO class for contextual reading and writing of a
         configuration file
 
@@ -30,7 +30,7 @@ class ConfigIO(object):
         self.file_path = file_path
         self.modified_time = 0
         self.__context_write = False
-        self._sync = False
+        self._sync = sync
         self._io_read = read
         self._io_write = write
 
@@ -110,6 +110,7 @@ class BaseConfig(object):
             path (str): the fie path of the config
             default (dict): default data to fill the file
         """
+        self.path = path
         self.io = ConfigIO(path, self._io_read, self._io_write, default=default)
         self.io.read_from_disk()
 
@@ -149,7 +150,7 @@ class BaseConfig(object):
         self.io.save_to_disk()
 
     def __eq__(self, other):
-        return self.io.file_path == other or self != other
+        return self.path == other or self != other
 
     def revert(self):
         """Revert the file from the current contents on disk"""
@@ -226,3 +227,21 @@ def find_one(name):
         return next(_path_find_generator(name))
     except StopIteration:
         return None
+
+
+def get_global_settings_folder(create=True):
+    user_path = os.path.expanduser("~")
+    if user_path.endswith("Documents"):
+        user_path = os.path.dirname(user_path)
+    settings_path = os.path.join(user_path, ".dotblox")
+    if create and not os.path.exists(settings_path):
+        os.mkdir(settings_path)
+    return settings_path
+
+def get_global_settings_file(file_name, create=True, create_folder=True):
+    settings_folder = get_global_settings_folder(create_folder)
+    settings_file = os.path.join(settings_folder, file_name)
+    if create and not os.path.exists(settings_file):
+        with open(settings_file, 'w') as _:
+            pass
+    return settings_file
