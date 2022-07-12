@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - [beta]: this branch has the latest changes; these commits may be overwritten.
 
+## [2.0.1] - 2022-07-12
+### Fix
+- dobloxmaya `get_qt_fullname` cast to long on some platforms
+
+
 ## [2.0.0] - 2022-07-12
 ### New
 - `Code Wall` tool for directly running snippets. Documentation to follow.
@@ -62,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [beta]: https://github.com/dotRyan/dotblox/compare/master...beta
+[2.0.1]: https://github.com/dotRyan/dotblox/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/dotRyan/dotblox/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/dotRyan/dotblox/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/dotRyan/dotblox/compare/v0.1.1...v1.0.0
