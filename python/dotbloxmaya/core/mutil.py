@@ -7,7 +7,7 @@ from shiboken2 import getCppPointer, wrapInstance
 
 
 def get_qt_fullname(widget):
-    return omui1.MQtUtil.fullName(getCppPointer(widget)[0])
+    return omui1.MQtUtil.fullName(long(getCppPointer(widget)[0]))
 
 
 def maya_main_window():
