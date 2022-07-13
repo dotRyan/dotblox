@@ -220,7 +220,9 @@ class Config(config.ConfigJSON):
             str: relative path
         """
         try:
-            return os.path.relpath(path, os.path.dirname(self.path))
+            return os.path.relpath(
+                path,
+                os.path.dirname(self.path)).replace("\\", "/")
         except:
             return path
 
