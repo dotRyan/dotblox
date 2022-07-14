@@ -32,6 +32,9 @@ class CodeWallWidget(QtWidgets.QWidget):
         self.ui.config_menu.aboutToShow.connect(self._build_config_menu)
         self.ui.tab_widget.currentChanged.connect(self._on_tab_change)
         self.ui.refresh_menu.triggered.connect(self._rebuild_tabs)
+        self.ui.read_only_menu.triggered[bool].connect(self._on_read_only)
+
+        self.ui.read_only_menu.setChecked(self.state_config.get_read_only())
 
         self._rebuild_tabs()
 
@@ -56,6 +59,7 @@ class CodeWallWidget(QtWidgets.QWidget):
             self.ui.tab_widget.setCurrentWidget(matched_tab)
 
         self.ui.tab_widget.blockSignals(False)
+        self._update_read_only()
 
     def _update_tab_order(self):
         """When the tab order changes update the state config"""
@@ -88,6 +92,23 @@ class CodeWallWidget(QtWidgets.QWidget):
 
         config.add_root(path, label)
         self._rebuild_tabs()
+
+    def _on_read_only(self, checked):
+        """Save to the config and set the tabs to the current read only state
+
+        Args:
+            checked(bool):
+
+        """
+        self.state_config.set_read_only(checked)
+        self._update_read_only()
+
+    def _update_read_only(self):
+        """Update the tabs with the current state read only value"""
+        state = self.state_config.get_read_only()
+        for index in range(self.ui.tab_widget.count()):
+            widget = self.ui.tab_widget.widget(index)
+            widget.set_read_only(state)
 
     def _on_update_config(self, widget):
         """ Update the given widgets config
@@ -212,6 +233,8 @@ class CodeWallUI(object):
         main_layout.addWidget(self.tab_widget)
 
         self.settings_menu = QtWidgets.QMenu("Settings Menu")
+        self.read_only_menu = self.settings_menu.addAction("Read Only")
+        self.read_only_menu.setCheckable(True)
         self.config_menu = self.settings_menu.addMenu("Config")
         self.refresh_menu = self.settings_menu.addAction("Refresh")
 

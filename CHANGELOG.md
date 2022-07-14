@@ -10,11 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.3] - 2022-07-13
 ### Fix
 - TextEditor QPalette.All not supported
-
+### New
+- [Code Wall] add option to disable drag and drop
 
 ## [2.0.2] - 2022-07-13
 ### Fix
-- Code Wall not replacing `\\` on relative paths
+- [Code Wall] not replacing `\\` on relative paths
 
 
 ## [2.0.1] - 2022-07-12
@@ -24,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.0] - 2022-07-12
 ### New
-- `Code Wall` tool for directly running snippets. Documentation to follow.
+- [Code Wall] tool for directly running snippets. Documentation to follow.
 
 ### Changed
 - Refactored folder structure
@@ -92,3 +93,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [.Modeling]: docs/maya/tools.md#.Modeling
 [Primitives]: docs/maya/tools.md#Primitives
 [Pivoting]: docs/maya/tools.md#Pivoting
+[Code Wall]: docs/tools/codewall.md
