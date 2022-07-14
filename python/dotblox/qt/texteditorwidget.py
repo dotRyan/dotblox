@@ -60,11 +60,11 @@ class TextEditorWidget(QtWidgets.QPlainTextEdit):
 
             palette = self.palette()
 
-            base_color = palette.color(palette.All, palette.Base)
+            base_color = palette.color(palette.Normal, palette.Base)
             lightness = base_color.lightnessF()
 
             if lightness > .5:
-                line_color = base_color.darker(110)
+                line_color = base_color.darker(125)
             else:
                 line_color = base_color.lighter(110)
 
@@ -84,9 +84,9 @@ class TextEditorWidget(QtWidgets.QPlainTextEdit):
 
     def line_number_area_paint_event(self, event):
         palette = self.palette()
-        text_color = palette.color(palette.All, palette.Text)
+        text_color = palette.color(palette.Normal, palette.Text)
 
-        base_color = palette.color(palette.All, palette.Base)
+        base_color = palette.color(palette.Normal, palette.Base)
         lightness = base_color.lightnessF()
 
         if lightness > .5:
