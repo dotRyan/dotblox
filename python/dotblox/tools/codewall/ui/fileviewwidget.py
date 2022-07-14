@@ -18,7 +18,6 @@ class FileViewWidget(QtWidgets.QWidget):
         self.file_system = FileSystemModel()
         name_filters = list("*" + x for x in self.hook.get_supported_extensions())
         self.file_system.setNameFilters(name_filters)
-        self.file_system.setReadOnly(False)
         self.ui.tree_view.setModel(self.file_system)
 
         self.ui.tree_view.customContextMenuRequested.connect(self._tree_view_context_menu)
@@ -67,6 +66,10 @@ class FileViewWidget(QtWidgets.QWidget):
             folder_path = self._get_selected_item_folder()
 
         api.create_new_folder_dialog(folder_path)
+
+    def set_read_only(self, value):
+        """Enable/Disable drag and drop within the interface"""
+        self.file_system.setReadOnly(value)
 
     def _on_create_script(self, folder_path=None):
         """Action for creating a script

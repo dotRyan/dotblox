@@ -315,6 +315,7 @@ class StateConfig(config.ConfigJSON):
     """Save the current state of the interface"""
     EXPANDED_STATES = "states"
     CURRENT_TAB = "current_tab"
+    READ_ONLY = "read_only"
 
     def __init__(self, app):
         self.app = app
@@ -323,6 +324,14 @@ class StateConfig(config.ConfigJSON):
         with self.io.write() as data:
             if self.app not in data:
                 data[self.app] = {self.EXPANDED_STATES: {}}
+
+    def set_read_only(self, value):
+        with self.io.write() as data:
+            data[self.app][self.READ_ONLY] = value
+
+    def get_read_only(self, default=True):
+        with self.io as data:
+            return data[self.app].get(self.READ_ONLY, default)
 
     def set_state(self, root_path, item_path):
         """Set the expanded state
