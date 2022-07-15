@@ -344,6 +344,11 @@ class _TreeView(QtWidgets.QTreeView):
         self.setIconSize(QtCore.QSize(20, 20))
         self.setEditTriggers(self.SelectedClicked | self.EditKeyPressed)
 
+        self._last_pos = None
+
+        self.setHorizontalScrollMode(self.ScrollPerPixel)
+        self.setVerticalScrollMode(self.ScrollPerPixel)
+
         # Drag and Drop
         self.setDragEnabled(True)
         self.setAcceptDrops(True)
@@ -364,6 +369,11 @@ class _TreeView(QtWidgets.QTreeView):
         if event.button() == QtCore.Qt.RightButton:
             QtWidgets.QTreeView.mousePressEvent(self, event)
             self.customContextMenuRequested.emit(event.pos())
+        elif event.button() == QtCore.Qt.MidButton \
+                and event.modifiers() == QtCore.Qt.AltModifier:
+            # Ensures that this is only enacted when the mouse is clicked
+            self._last_pos = event.globalPos()
+            return
         else:
             QtWidgets.QTreeView.mousePressEvent(self, event)
 
@@ -371,6 +381,28 @@ class _TreeView(QtWidgets.QTreeView):
             if not index_under_mouse.isValid():
                 self.clearSelection()
                 return
+
+    def mouseReleaseEvent(self, event):
+        if self._last_pos:
+            self._last_pos = None
+            self.setCursor(QtCore.Qt.ArrowCursor)
+            return
+
+        QtWidgets.QTreeView.mouseReleaseEvent(self, event)
+
+    def mouseMoveEvent(self, event):
+        if self._last_pos:
+            current_pos = event.globalPos()
+            delta = self._last_pos - current_pos
+            h = self.horizontalScrollBar()
+            h.setSliderPosition(h.sliderPosition() + (delta.x()))
+            v = self.verticalScrollBar()
+            v.setSliderPosition(v.sliderPosition() + (delta.y()))
+            self.setCursor(QtCore.Qt.ClosedHandCursor)
+            self._last_pos = current_pos
+            return
+
+        QtWidgets.QTreeView.mouseMoveEvent(self, event)
 
 
 class FileIconProvider(QtWidgets.QFileIconProvider):
