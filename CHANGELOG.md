@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - [beta]: this branch has the latest changes; these commits may be overwritten.
 
-## [2.0.3] - 2022-07-13
+## [2.1.0] - 2022-07-13
 ### Fix
 - TextEditor QPalette.All not supported
+
 ### New
 - [Code Wall] add option to disable drag and drop
+- [Code Wall] middle mouse scrolling while alt is pressed
 
 ## [2.0.2] - 2022-07-13
 ### Fix
@@ -78,7 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [beta]: https://github.com/dotRyan/dotblox/compare/master...beta
-[2.0.3]: https://github.com/dotRyan/dotblox/compare/v2.0.2...v2.0.3
+[2.1.0]: https://github.com/dotRyan/dotblox/compare/v2.0.2...v2.1.0
 [2.0.2]: https://github.com/dotRyan/dotblox/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/dotRyan/dotblox/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/dotRyan/dotblox/compare/v1.1.0...v2.0.0
