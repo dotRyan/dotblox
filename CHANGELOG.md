@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Code Wall] add option to disable drag and drop
 - [Code Wall] middle mouse scrolling while alt is pressed
 
+### Changed
+- [Code Wall] file icon provider shared pixmap cache
+
 ## [2.0.2] - 2022-07-13
 ### Fix
 - [Code Wall] not replacing `\\` on relative paths

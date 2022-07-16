@@ -406,10 +406,9 @@ class _TreeView(QtWidgets.QTreeView):
 
 
 class FileIconProvider(QtWidgets.QFileIconProvider):
+    PIXMAP_CACHE = {}
     def __init__(self):
         QtWidgets.QFileIconProvider.__init__(self)
-
-        self.pixmap_cache = {}
 
         self.default_file = self.get_pixmap(get_icon("dblx_file.png"))
         self.default_folder = self.get_pixmap(get_icon("dblx_folder.png"))
@@ -422,9 +421,9 @@ class FileIconProvider(QtWidgets.QFileIconProvider):
                 icon_path = get_icon("dblx_file_{ext}.png".format(
                         ext=file_info.suffix()))
                 if icon_path:
-                    if icon_path not in self.pixmap_cache:
-                        self.pixmap_cache[icon_path] = self.get_pixmap(icon_path)
-                    return self.pixmap_cache[icon_path]
+                    if icon_path not in self.PIXMAP_CACHE:
+                        self.PIXMAP_CACHE[icon_path] = self.get_pixmap(icon_path)
+                    return self.PIXMAP_CACHE[icon_path]
                 return self.default_file
             else:
                 return self.default_folder
