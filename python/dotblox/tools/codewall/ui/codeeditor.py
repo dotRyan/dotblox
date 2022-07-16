@@ -17,11 +17,15 @@ class CodeEditor(QtWidgets.QWidget):
         self.ui = CodeEditorUI()
         self.ui.setup_ui(self)
 
+        bg_color = "#272822"
+
         self.hook = hook
         pythonsyntax.PythonHighlighter(self.ui.editor.document())
         palette = self.ui.editor.palette()
-        palette.setColor(palette.Base, QtGui.QColor("#272822"))
+        palette.setColor(palette.Base, QtGui.QColor(bg_color))
         palette.setColor(palette.Text, QtGui.QColor("#FFFFFF"))
+        # Fix for houdini which cannot be set by a palette
+        self.ui.editor.setStyleSheet("background-color: %s;" % bg_color)
         self.ui.editor.setPalette(palette)
         self.ui.reload_btn.clicked.connect(self._on_reload)
         self.ui.save_btn.clicked.connect(self._on_save)

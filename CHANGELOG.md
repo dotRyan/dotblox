@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - [beta]: this branch has the latest changes; these commits may be overwritten.
 
-## [2.1.0] - 2022-07-13
+## [2.1.0] - 2022-07-15
 ### Fix
 - TextEditor QPalette.All not supported
+- [Code Wall] houdini code editor background not getting proper color
 
 ### New
 - [Code Wall] add option to disable drag and drop
