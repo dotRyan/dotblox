@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.0] - 2022-07-21
 ### New
+- generated docs! https://dotryan.github.io/dotblox/
 - [Code Wall] has an option to remove a tabs closeable status
 
 ### Changed:
@@ -28,8 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New
 - [Code Wall]
-  - add option to disable drag and drop
-  - middle mouse scrolling while alt is pressed
+    - add option to disable drag and drop
+    - middle mouse scrolling while alt is pressed
 
 ### Changed
 - [Code Wall] file icon provider shared pixmap cache
@@ -109,10 +110,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.1]: https://github.com/dotRyan/dotblox/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/dotRyan/dotblox/releases/tag/v0.1.0
 
-[Beveler]: docs/maya/tools.md#Beveler
-[Colorizer]: docs/maya/tools.md#Colorizer
-[Mirrorer]: docs/maya/tools.md#Mirrorer
-[.Modeling]: docs/maya/tools.md#.Modeling
-[Primitives]: docs/maya/tools.md#Primitives
-[Pivoting]: docs/maya/tools.md#Pivoting
-[Code Wall]: docs/tools/codewall.md
+[Beveler]: https://dotryan.github.io/dotblox/maya/modeling/#beveler
+[Colorizer]: https://dotryan.github.io/dotblox/maya/general/#colorizer
+[Mirrorer]: https://dotryan.github.io/dotblox/maya/modeling/#mirrorer
+[.Modeling]: https://dotryan.github.io/dotblox/maya/modeling/#modeling
+[Primitives]: https://dotryan.github.io/dotblox/maya/modeling/#primatives
+[Pivoting]: https://dotryan.github.io/dotblox/maya/general/#pivoting
+[Code Wall]: https://dotryan.github.io/dotblox/tools/codewall/
