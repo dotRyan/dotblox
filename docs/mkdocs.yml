@@ -1,0 +1,14 @@
+site_name: dotblox
+repo_name: GitHub
+repo_url: https://github.com/dotRyan/dotblox/
+docs_dir: _docs
+theme:
+  name: readthedocs
+
+markdown_extensions:
+  - toc:
+      permalink: "#"
+      toc_depth: 1-3
+  - admonition
+  - attr_list
+  - sane_lists
