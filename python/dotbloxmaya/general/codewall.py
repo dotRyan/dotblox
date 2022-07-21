@@ -16,6 +16,7 @@ exec(compile(\"""{text}\""", "interactive", "exec"), globals(), locals())
 
 
 class MayaHook(codewall.Hook):
+    APP = "maya"
 
     def get_supported_extensions(self):
         extensions = codewall.Hook.get_supported_extensions(self)
@@ -30,7 +31,7 @@ class MayaHook(codewall.Hook):
                 mel.eval('source \"{file_path}\"'.format(file_path=file_path))
 
     def execute_text(self, text, file_name):
-        print text
+        print(text)
         if file_name.endswith(".py"):
             cmds.evalDeferred(python_text_command.format(text=text))
         elif file_name.endswith(".mel"):
