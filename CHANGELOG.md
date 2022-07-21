@@ -8,7 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - [beta]: this branch has the latest changes; these commits may be overwritten.
 
-## [2.2.0] - 2022-07-20
+## [2.2.0] - 2022-07-21
+### New
+- [Code Wall] has an option to remove a tabs closeable status
+
 ### Changed:
 - [Code Wall] moved tab order to `StateConfig`
 

@@ -170,8 +170,10 @@ def remove(path, archive_root=None):
 
 class Config(config.ConfigJSON):
     """Handles the read/write of the config files"""
-    PATH = "path"
-    LABEL = "label"
+    PATH_LABEL = "label"
+    PATH_EDIT_PATH = "edit_path"
+    PATH_EDIT_CONTENTS = "edit_contents"
+    GLOBAL_LOCKED = "__locked__"
 
     def __init__(self, path):
         config.ConfigJSON.__init__(self, path)
@@ -186,6 +188,8 @@ class Config(config.ConfigJSON):
         result = []
         with self.io as data:
             for path in data:
+                if path in [self.GLOBAL_LOCKED]:
+                    continue
                 result.append(path)
         return result
 
@@ -235,31 +239,28 @@ class Config(config.ConfigJSON):
             str|None: label or None if not found
         """
         with self.io as data:
-            return data[root].get(self.LABEL)
+            return data[root].get(self.PATH_LABEL)
 
-    def get_order(self, root, default=None):
-        """Get the tab order of the root path
+    def root_can_edit_path(self, root):
+        """Check where a tab should have
 
         Args:
-            root (str): root path
-            default (any): if no order is given
+            root (str): root path to query
 
         Returns:
-            int|float: order number
+            bool
         """
         with self.io as data:
-            return data[root].get(self.ORDER, default)
+            return data[root].get(self.PATH_EDIT_PATH, True)
 
-    def set_order(self, root, order):
-        """Set the order number of the root path
-
-        Args:
-            root (str): root path
-            order (int): order number
-
-        """
+    def root_can_edit_contents(self, root):
         with self.io as data:
-            data[root][self.ORDER] = order
+            return data[root].get(self.PATH_EDIT_CONTENTS, True)
+
+    def config_is_locked(self):
+        """Check if the whole config overrides the editable setting"""
+        with self.io as data:
+            return data.get(self.GLOBAL_LOCKED, False)
 
     def remove_root(self, root):
         """Remove the given root path
@@ -282,7 +283,7 @@ class Config(config.ConfigJSON):
         with self.io.write() as data:
             item = data.get(path, {})
             if label:
-                item.update({self.LABEL: label})
+                item.update({self.PATH_LABEL: label})
             data[path] = item
 
     def update_label(self, root, label):
@@ -293,9 +294,9 @@ class Config(config.ConfigJSON):
             label(str): label to update to. Set to any falsey value to remove
         """
         with self.io.write() as data:
-            del data[root][self.LABEL]
+            del data[root][self.PATH_LABEL]
             if label:
-                data[root][self.LABEL] = label
+                data[root][self.PATH_LABEL] = label
 
     def update_root(self, old, new):
         """Update a root path to a new path

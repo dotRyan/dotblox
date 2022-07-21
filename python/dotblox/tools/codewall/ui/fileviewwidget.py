@@ -12,6 +12,14 @@ class FileViewWidget(QtWidgets.QWidget):
         self.hook = hook
         self.state_config = state_config
 
+        self.config = config
+        self.config_path = root_path
+
+        is_locked = self.config.config_is_locked()
+
+        self.can_edit_path = not is_locked and self.config.root_can_edit_path(self.config_path)
+        self.can_edit_contents = not is_locked and self.config.root_can_edit_contents(self.config_path)
+
         self.ui = FileViewWidgetUI()
         self.ui.setup_ui(self)
 
@@ -28,8 +36,7 @@ class FileViewWidget(QtWidgets.QWidget):
 
         self.ui.tree_view.expanded.connect(self._store_state)
         self.ui.tree_view.collapsed.connect(self._store_state)
-        self.config = config
-        self.config_path = root_path
+
         if root_path:
             self.set_root_path(self.config_path)
             self._restore_states()
@@ -117,6 +124,10 @@ class FileViewWidget(QtWidgets.QWidget):
         if file_info.isFile():
             menu.addAction("Run", lambda *x: self._run_file(file_path))
 
+        if not self.can_edit_contents:
+            if menu.children():
+                menu.exec_(QtGui.QCursor.pos())
+            return
 
         menu.addSection("Create")
         action = menu.addAction(
@@ -196,7 +207,7 @@ class FileViewWidget(QtWidgets.QWidget):
 
 
 class FileViewWidgetUI():
-    def setup_ui(self, parent_widget):
+    def setup_ui(self, widget):
 
 
         action_button_layout = QtWidgets.QHBoxLayout()
@@ -225,14 +236,15 @@ class FileViewWidgetUI():
 
         self.view_layout = QtWidgets.QVBoxLayout()
         self.view_layout.setContentsMargins(2, 2, 2, 2)
-        self.view_layout.addLayout(action_button_layout)
+        if widget.can_edit_contents:
+            self.view_layout.addLayout(action_button_layout)
         self.view_layout.addWidget(self.tree_view)
 
 
         main_layout = QtWidgets.QVBoxLayout()
         main_layout.addLayout(self.view_layout)
 
-        parent_widget.setLayout(main_layout)
+        widget.setLayout(main_layout)
 
 
 class FileSystemModel(QtWidgets.QFileSystemModel):
