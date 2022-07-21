@@ -1,6 +1,7 @@
 from dotblox.tools import codewall
 
 class HoudiniHook(codewall.Hook):
+    APP = "houdini"
     pass
 
 class HoudiniCodeWallWidget(codewall.CodeWallWidget):

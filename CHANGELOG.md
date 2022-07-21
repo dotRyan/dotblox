@@ -1,5 +1,6 @@
 # Changelog
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file.  
+Documentation for front facing tools can be found [here](https://dotryan.github.io/dotblox)
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -7,14 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - [beta]: this branch has the latest changes; these commits may be overwritten.
 
+## [2.2.0] - 2022-07-20
+### Fix
+- [Code Wall] adjusted maya/houdini hooks to match dcc
+
 ## [2.1.0] - 2022-07-15
 ### Fix
 - TextEditor QPalette.All not supported
 - [Code Wall] houdini code editor background not getting proper color
 
 ### New
-- [Code Wall] add option to disable drag and drop
-- [Code Wall] middle mouse scrolling while alt is pressed
+- [Code Wall]
+  - add option to disable drag and drop
+  - middle mouse scrolling while alt is pressed
 
 ### Changed
 - [Code Wall] file icon provider shared pixmap cache
@@ -84,6 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [beta]: https://github.com/dotRyan/dotblox/compare/master...beta
+[2.2.0]: https://github.com/dotRyan/dotblox/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/dotRyan/dotblox/compare/v2.0.2...v2.1.0
 [2.0.2]: https://github.com/dotRyan/dotblox/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/dotRyan/dotblox/compare/v2.0.0...v2.0.1
