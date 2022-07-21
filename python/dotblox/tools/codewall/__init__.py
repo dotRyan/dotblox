@@ -65,6 +65,19 @@ class CodeWallWidget(QtWidgets.QWidget):
         self.ui.tab_widget.blockSignals(False)
         self._update_read_only()
 
+        tab_bar = self.ui.tab_widget.tabBar()
+        for index in range(self.ui.tab_widget.count()):
+            widget = self.ui.tab_widget.widget(index)
+            if widget.can_edit_path:
+                continue
+
+            right = tab_bar.tabButton(index, QtWidgets.QTabBar.RightSide)
+            left = tab_bar.tabButton(index, QtWidgets.QTabBar.LeftSide)
+            if right:
+                right.hide()
+            if left:
+                left.hide()
+
     def _update_tab_order(self):
         """When the tab order changes update the state config"""
         tabs = []
@@ -77,9 +90,12 @@ class CodeWallWidget(QtWidgets.QWidget):
         """Build the config menu based on the current configs"""
         self.ui.config_menu.clear()
         for config in self.configs:
-            self.ui.config_menu.addAction(
+            action = self.ui.config_menu.addAction(
                 config.path,
                 lambda x=config: self._show_config_dialog(config))
+            if config.config_is_locked():
+                action.setEnabled(False)
+                action.setText("Locked: " + action.text())
 
     def _show_config_dialog(self, config):
         """Launch a dialog to modify a config
@@ -114,6 +130,10 @@ class CodeWallWidget(QtWidgets.QWidget):
         state = self.state_config.get_read_only()
         for index in range(self.ui.tab_widget.count()):
             widget = self.ui.tab_widget.widget(index)
+            if not widget.can_edit_contents:
+                # Force to False just in case were in some weird state
+                widget.set_read_only(False)
+                continue
             widget.set_read_only(state)
 
     def _on_update_config(self, widget):
@@ -201,7 +221,8 @@ class CodeWallWidget(QtWidgets.QWidget):
 
         menu = QtWidgets.QMenu()
         menu.addAction("Show In Explorer", lambda *x: open_in_system(widget.root_path))
-        menu.addAction("Update Settings", lambda *x: self._on_update_config(widget))
+        if widget.can_edit_path:
+            menu.addAction("Update Settings", lambda *x: self._on_update_config(widget))
         menu.exec_(QtGui.QCursor.pos())
 
 
