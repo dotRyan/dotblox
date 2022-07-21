@@ -6,6 +6,8 @@ class ConfigDialog(QtWidgets.QDialog):
     def __init__(self, config_path, path=None, label=None, parent=None):
         QtWidgets.QDialog.__init__(self, parent=parent)
 
+        self.setWindowTitle("Code Wall: Config Editor")
+
         self.ui = ConfigDialogUI()
         self.ui.setup_ui(self)
 

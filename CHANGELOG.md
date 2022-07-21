@@ -10,7 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.0] - 2022-07-20
 ### Fix
-- [Code Wall] adjusted maya/houdini hooks to match dcc
+- [Code Wall] 
+  - adjusted maya/houdini hooks to match dcc
+  - general cleanup
 
 ## [2.1.0] - 2022-07-15
 ### Fix
