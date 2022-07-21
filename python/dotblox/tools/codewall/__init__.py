@@ -48,9 +48,13 @@ class CodeWallWidget(QtWidgets.QWidget):
 
         configs = config.find_all("codewall.dblx")
         self.configs = [Config(x) for x in configs] # python 3 compatible
+
+        tab_order = self.state_config.get_tab_order()
         for cfg in self.configs:
-            for root in sorted(cfg.get_roots(),
-                               key=lambda x: (cfg.get_order(x, float("inf")), cfg.get_label(x))):
+            for root in sorted(
+                    cfg.get_roots(),
+                    key=lambda x: (tab_order.index(x) if x in tab_order else float("inf"),
+                                   cfg.get_label(x))):
                 tab = FileViewWidget(root, cfg, self.state_config, self.hook)
                 self.ui.tab_widget.addTab(tab, tab.tab_name())
                 if last_tab == root:
@@ -63,9 +67,11 @@ class CodeWallWidget(QtWidgets.QWidget):
 
     def _update_tab_order(self):
         """When the tab order changes update the state config"""
+        tabs = []
         for index in range(self.ui.tab_widget.count()):
             widget = self.ui.tab_widget.widget(index)
-            widget.config.set_order(widget.config_path, index)
+            tabs.append(widget.config_path)
+        self.state_config.set_tab_order(tabs)
 
     def _build_config_menu(self):
         """Build the config menu based on the current configs"""

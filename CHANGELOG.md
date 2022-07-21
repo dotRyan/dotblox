@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [beta]: this branch has the latest changes; these commits may be overwritten.
 
 ## [2.2.0] - 2022-07-20
+### Changed:
+- [Code Wall] moved tab order to `StateConfig`
+
 ### Fix
 - [Code Wall] 
   - adjusted maya/houdini hooks to match dcc

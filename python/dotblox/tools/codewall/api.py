@@ -172,7 +172,6 @@ class Config(config.ConfigJSON):
     """Handles the read/write of the config files"""
     PATH = "path"
     LABEL = "label"
-    ORDER = "order"
 
     def __init__(self, path):
         config.ConfigJSON.__init__(self, path)
@@ -316,6 +315,7 @@ class StateConfig(config.ConfigJSON):
     EXPANDED_STATES = "states"
     CURRENT_TAB = "current_tab"
     READ_ONLY = "read_only"
+    TAB_ORDER = "tab_order"
 
     def __init__(self, app):
         self.app = app
@@ -394,3 +394,21 @@ class StateConfig(config.ConfigJSON):
         """
         with self.io as data:
             return data[self.app].get(self.CURRENT_TAB)
+
+    def get_tab_order(self):
+        """Get the order of the tabs
+
+        Returns:
+            list: list of root paths
+        """
+        with self.io.write() as data:
+            return data[self.app].get(self.TAB_ORDER, [])
+
+    def set_tab_order(self, paths):
+        """Set the current tab order with the given paths
+
+        Args:
+            paths (list[str]): tab paths in order
+        """
+        with self.io.write() as data:
+            data[self.app][self.TAB_ORDER] = paths
