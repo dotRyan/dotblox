@@ -17,8 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fix
 - [Code Wall] 
-  - adjusted maya/houdini hooks to match dcc
-  - general cleanup
+    - adjusted maya/houdini hooks to match dcc
+    - general cleanup
+    - double-click on folder items attempting to execute script
 
 ## [2.1.0] - 2022-07-15
 ### Fix
