@@ -155,7 +155,10 @@ class FileViewWidget(QtWidgets.QWidget):
             index(QtCore.QModelIndex): index of clicked item
 
         """
-        self._run_file(self.file_system.fileInfo(index).filePath())
+        file_info = self.file_system.fileInfo(index)
+        if file_info.isDir():
+            return
+        self._run_file(file_info.filePath())
 
     def _run_file(self, file_path):
         """Run the given file
