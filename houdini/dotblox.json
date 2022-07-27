@@ -1,0 +1,13 @@
+{
+  "env": [
+    {
+      "DOTBLOX_PATH": "{path}"
+    },
+    {
+      "HOUDINI_PATH": "$DOTBLOX_PATH/houdini"
+    },
+    {
+      "HOUDINI_UI_ICON_PATH": "$DOTBLOX_PATH/icons"
+    }
+  ]
+}

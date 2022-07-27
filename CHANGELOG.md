@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - [beta]: this branch has the latest changes; these commits may be overwritten.
 
+## [2.3.0] - 2022-07-27
+### New 
+- bootstrap module for installation dccs
+- easy installation for houdini and maya 
+
 ## [2.2.0] - 2022-07-21
 ### New
 - generated docs! https://dotryan.github.io/dotblox/
@@ -100,6 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [beta]: https://github.com/dotRyan/dotblox/compare/master...beta
+[2.3.0]: https://github.com/dotRyan/dotblox/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/dotRyan/dotblox/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/dotRyan/dotblox/compare/v2.0.2...v2.1.0
 [2.0.2]: https://github.com/dotRyan/dotblox/compare/v2.0.1...v2.0.2
