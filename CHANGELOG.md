@@ -14,12 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - easy installation for houdini and maya 
 - houdini show_python_panel
 
+### Changed
+- houdini codewall python panel label
+
 ## [2.2.0] - 2022-07-21
 ### New
 - generated docs! https://dotryan.github.io/dotblox/
 - [Code Wall] has an option to remove a tabs closeable status
 
-### Changed:
+### Changed
 - [Code Wall] moved tab order to `StateConfig`
 
 ### Fix
