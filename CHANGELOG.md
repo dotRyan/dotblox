@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### New 
 - bootstrap module for installation dccs
 - easy installation for houdini and maya 
+- houdini show_python_panel
 
 ## [2.2.0] - 2022-07-21
 ### New
