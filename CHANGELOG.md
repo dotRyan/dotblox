@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - houdini codewall python panel label
 
+### Fix
+- [Code Wall] context menu showing up twice on linux
+
 ## [2.2.0] - 2022-07-21
 ### New
 - generated docs! https://dotryan.github.io/dotblox/

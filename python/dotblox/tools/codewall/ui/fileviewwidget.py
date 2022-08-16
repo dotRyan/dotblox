@@ -31,8 +31,8 @@ class FileViewWidget(QtWidgets.QWidget):
         self.ui.tree_view.customContextMenuRequested.connect(self._tree_view_context_menu)
         self.ui.tree_view.doubleClicked.connect(self._on_tree_view_double_click)
 
-        self.ui.create_folder_btn.clicked.connect(lambda *x: self._on_create_folder())
-        self.ui.create_script_btn.clicked.connect(lambda *x: self._on_create_script())
+        self.ui.create_folder_btn.clicked.connect(self._on_create_folder)
+        self.ui.create_script_btn.clicked.connect(self._on_create_script)
 
         self.ui.tree_view.expanded.connect(self._store_state)
         self.ui.tree_view.collapsed.connect(self._store_state)
@@ -229,7 +229,6 @@ class FileViewWidgetUI():
 
 
         self.tree_view = _TreeView()
-        self.tree_view.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.tree_view.setHeaderHidden(True)
 
         self.invalid_layout = QtWidgets.QVBoxLayout()
@@ -361,6 +360,7 @@ class _TreeView(QtWidgets.QTreeView):
 
         self._last_pos = None
 
+        self.setContextMenuPolicy(QtCore.Qt.PreventContextMenu)
         self.setHorizontalScrollMode(self.ScrollPerPixel)
         self.setVerticalScrollMode(self.ScrollPerPixel)
 
