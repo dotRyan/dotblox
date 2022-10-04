@@ -1,7 +1,5 @@
-import math
 import os
 import subprocess
-import traceback
 
 from PySide2 import QtWidgets, QtCore, QtGui
 
@@ -275,11 +273,8 @@ class Hook():
     APP = "shell"
 
     def run_file(self, file_path):
-        try:
-            with open(file_path) as f:
-                exec (compile(f.read(), file_path, "exec"))
-        except Exception as e:
-            traceback.print_exc(e)
+        with open(file_path) as f:
+            exec (compile(f.read(), file_path, "exec"))
 
     def get_supported_extensions(self):
         return [".py"]

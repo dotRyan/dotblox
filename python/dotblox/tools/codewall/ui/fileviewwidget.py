@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from PySide2 import QtWidgets, QtCore, QtGui
 from dotblox.tools.codewall import api
@@ -167,7 +168,10 @@ class FileViewWidget(QtWidgets.QWidget):
             file_path(str): file to run
 
         """
-        self.hook.run_file(file_path)
+        try:
+            self.hook.run_file(file_path)
+        except Exception as e:
+            traceback.print_exc(e)
 
     def _on_modify_script(self, file_path):
         """Create/Edit the given file
