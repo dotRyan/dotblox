@@ -7,8 +7,7 @@ from dotblox import config
 from dotblox.tools.codewall.ui.configdialog import ConfigDialog
 from dotblox.tools.codewall.ui.fileviewwidget import FileViewWidget
 from dotblox.icon import get_icon
-from dotblox.tools.codewall.api import Config, StateConfig
-
+from dotblox.tools.codewall.api import Config, StateConfig, CONFIG_NAME, SETTINGS_STATE_NAME
 
 class CodeWallWidget(QtWidgets.QWidget):
     def __init__(self, hook=None, parent=None):
@@ -18,7 +17,7 @@ class CodeWallWidget(QtWidgets.QWidget):
         self.setWindowTitle(widget_title)
 
         self.hook = hook if hook else Hook()
-        self.state_config = StateConfig(self.hook.APP)
+        self.state_config = StateConfig(self.hook.get_state_file_name())
 
         self.ui = CodeWallUI()
         self.ui.setup_ui(self)
@@ -37,14 +36,14 @@ class CodeWallWidget(QtWidgets.QWidget):
         self._rebuild_tabs()
 
     def _rebuild_tabs(self):
-        """Re update all the configs and rebuild the tabs"""
+        """Update all the configs and rebuild the tabs"""
         last_tab = self.state_config.get_current_tab()
         matched_tab = None
 
         self.ui.tab_widget.blockSignals(True)
         self.ui.tab_widget.clear()
 
-        configs = config.find_all("codewall.dblx")
+        configs = config.find_all(self.hook.get_config_file_name(), include_global=True)
         self.configs = [Config(x) for x in configs] # python 3 compatible
 
         tab_order = self.state_config.get_tab_order()
@@ -66,9 +65,10 @@ class CodeWallWidget(QtWidgets.QWidget):
         tab_bar = self.ui.tab_widget.tabBar()
         for index in range(self.ui.tab_widget.count()):
             widget = self.ui.tab_widget.widget(index)
-            if widget.can_edit_path:
+            if widget.is_removable:
                 continue
 
+            # Hide close button
             right = tab_bar.tabButton(index, QtWidgets.QTabBar.RightSide)
             left = tab_bar.tabButton(index, QtWidgets.QTabBar.LeftSide)
             if right:
@@ -91,27 +91,26 @@ class CodeWallWidget(QtWidgets.QWidget):
             action = self.ui.config_menu.addAction(
                 config.path,
                 lambda x=config: self._show_config_dialog(config))
-            if config.config_is_locked():
+            if not config.is_writable():
                 action.setEnabled(False)
                 action.setText("Locked: " + action.text())
 
-    def _show_config_dialog(self, config):
+        self.ui.config_menu.addSeparator()
+        self.ui.config_menu.addAction("New Config", self._show_config_dialog)
+
+    def _show_config_dialog(self, config=None):
         """Launch a dialog to modify a config
 
         Args:
             config(Config: config to operate on
 
         """
-        dialog = ConfigDialog(config.path, parent=self)
+        dialog = ConfigDialog(self.hook, config=config, parent=self)
         if not dialog.exec_():
             return
 
-        label, path, as_relative = dialog.result()
-        if as_relative:
-            path = config.get_relative_path(path)
-
-        config.add_root(path, label)
-        self._rebuild_tabs()
+        if dialog.result():
+            self._rebuild_tabs()
 
     def _on_read_only(self, checked):
         """Save to the config and set the tabs to the current read only state
@@ -128,7 +127,7 @@ class CodeWallWidget(QtWidgets.QWidget):
         state = self.state_config.get_read_only()
         for index in range(self.ui.tab_widget.count()):
             widget = self.ui.tab_widget.widget(index)
-            if not widget.can_edit_contents:
+            if not widget.root_writable:
                 # Force to False just in case were in some weird state
                 widget.set_read_only(False)
                 continue
@@ -142,29 +141,11 @@ class CodeWallWidget(QtWidgets.QWidget):
 
         """
         old_path = widget.config_path
-        old_label = widget.config.get_label(old_path)
-        dialog = ConfigDialog(widget.config.path,
+        dialog = ConfigDialog(self.hook,
+                              config=widget.config,
                               path=old_path,
-                              label=old_label, parent=self)
-        if not dialog.exec_():
-            return
-
-        label, path, relative = dialog.result()
-
-        updates = False
-
-        if label != old_label:
-            updates = True
-            widget.config.update_label(old_path, label)
-
-        if relative:
-            path = widget.config.get_relative_path(path)
-
-        if path != old_path:
-            updates = True
-            widget.config.update_root(old_path, path)
-
-        if updates:
+                              parent=self)
+        if dialog.exec_():
             self._rebuild_tabs()
 
     def _on_tab_change(self, index):
@@ -219,7 +200,8 @@ class CodeWallWidget(QtWidgets.QWidget):
 
         menu = QtWidgets.QMenu()
         menu.addAction("Show In Explorer", lambda *x: open_in_system(widget.root_path))
-        if widget.can_edit_path:
+        if widget.config_writable:
+            menu.addSeparator()
             menu.addAction("Update Settings", lambda *x: self._on_update_config(widget))
         menu.exec_(QtGui.QCursor.pos())
 
@@ -273,12 +255,39 @@ class Hook():
     APP = "shell"
 
     def run_file(self, file_path):
+        """Execute the file within the dcc"""
         with open(file_path) as f:
             exec (compile(f.read(), file_path, "exec"))
 
     def get_supported_extensions(self):
+        """Return the extension of files to be filtered within the folder"""
         return [".py"]
 
     def execute_text(self, text, file_name):
+        """Execute text rather than from a python file"""
         if file_name is None or file_name.endswith(".py"):
             exec (compile(text, "codewall_interactive", "exec"), globals(), locals())
+
+    def get_default_config_path(self):
+        """Return the default config path.
+
+        Returns:
+            str: the path to default the config to
+        """
+        return None
+
+    def get_default_root_path(self):
+        """Return the dccs default path to be added as a library
+
+        Returns:
+            list[str]: label, path
+        """
+        return (None, None)
+
+    def get_config_file_name(self):
+        """Get the default config file name"""
+        return "_".join([self.APP, CONFIG_NAME])
+
+    def get_state_file_name(self):
+        """Get the default state file name"""
+        return "_".join([self.APP, SETTINGS_STATE_NAME])

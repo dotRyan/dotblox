@@ -14,6 +14,7 @@ python_text_command = """
 exec(compile(\"""{text}\""", "interactive", "exec"), globals(), locals())
 """
 
+SCRIPT_DIR = "$MAYA_APP_DIR/scripts"
 
 class MayaHook(codewall.Hook):
     APP = "maya"
@@ -36,6 +37,12 @@ class MayaHook(codewall.Hook):
             cmds.evalDeferred(python_text_command.format(text=text))
         elif file_name.endswith(".mel"):
             mel.eval(text)
+
+    def get_default_config_path(self):
+        return os.path.expandvars(SCRIPT_DIR)
+
+    def get_default_root_path(self):
+        return (self.APP.capitalize(), SCRIPT_DIR)
 
 
 class MayaCodeWallWidget(codewall.CodeWallWidget):

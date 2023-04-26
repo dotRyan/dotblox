@@ -1,9 +1,11 @@
 
 from dotblox.tools.codewall.ui.configdialog import ConfigDialog
+from dotblox.tools.codewall import Hook
+
 from dotblox.qt import standaloneqt
 
 def main(app):
-    win = ConfigDialog("/path/to/config.dblx")
+    win = ConfigDialog(Hook())
     if win.exec_():
         print win.result()
     return win

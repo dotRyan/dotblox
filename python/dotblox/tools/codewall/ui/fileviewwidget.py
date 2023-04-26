@@ -16,10 +16,13 @@ class FileViewWidget(QtWidgets.QWidget):
         self.config = config
         self.config_path = root_path
 
-        is_locked = self.config.config_is_locked()
+        self.config_writable = self.config.is_writable()
 
-        self.can_edit_path = not is_locked and self.config.root_can_edit_path(self.config_path)
-        self.can_edit_contents = not is_locked and self.config.root_can_edit_contents(self.config_path)
+        self.is_removable = self.config_writable and \
+                            self.config.get_root_option(
+                                self.config_path,
+                                self.config.ROOT_OPT_REMOVABLE,
+                                True)
 
         self.ui = FileViewWidgetUI()
         self.ui.setup_ui(self)
@@ -50,8 +53,11 @@ class FileViewWidget(QtWidgets.QWidget):
 
         """
         self.root_path = self.config.expand_path(path).replace("\\", "/")
-        layout = self.layout()
+        self.root_writable = os.access(self.root_path, os.W_OK)
 
+        self.ui.actions_widget.setVisible(self.root_writable)
+
+        layout = self.layout()
         layout.removeItem(self.ui.view_layout)
         layout.removeItem(self.ui.invalid_layout)
 
@@ -125,7 +131,7 @@ class FileViewWidget(QtWidgets.QWidget):
         if file_info.isFile():
             menu.addAction("Run", lambda *x: self._run_file(file_path))
 
-        if not self.can_edit_contents:
+        if not self.root_writable:
             if menu.children():
                 menu.exec_(QtGui.QCursor.pos())
             return
@@ -231,6 +237,9 @@ class FileViewWidgetUI():
         self.create_script_btn.setStyleSheet("background-color: transparent;outline:none;border:none;")
         action_button_layout.addWidget(self.create_script_btn)
 
+        self.actions_widget = QtWidgets.QWidget()
+        self.actions_widget.setContentsMargins(0,0,0,0)
+        self.actions_widget.setLayout(action_button_layout)
 
         self.tree_view = _TreeView()
         self.tree_view.setHeaderHidden(True)
@@ -242,8 +251,7 @@ class FileViewWidgetUI():
 
         self.view_layout = QtWidgets.QVBoxLayout()
         self.view_layout.setContentsMargins(2, 2, 2, 2)
-        if widget.can_edit_contents:
-            self.view_layout.addLayout(action_button_layout)
+        self.view_layout.addWidget(self.actions_widget)
         self.view_layout.addWidget(self.tree_view)
 
 

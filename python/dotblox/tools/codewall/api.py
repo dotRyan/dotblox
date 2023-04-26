@@ -7,7 +7,8 @@ from dotblox.tools.codewall.ui.codeeditor import CodeEditor
 
 DEBUG = False
 ARCHIVE_FOLDER_NAME = "__archive"
-
+CONFIG_NAME = "codewall.dblx"
+SETTINGS_STATE_NAME = "codewall-state.dblx"
 
 def create_new_folder_dialog(path):
     """Dialog for creating a new folder under the given path
@@ -171,27 +172,27 @@ def remove(path, archive_root=None):
 class Config(config.ConfigJSON):
     """Handles the read/write of the config files"""
     PATH_LABEL = "label"
-    PATH_EDIT_PATH = "edit_path"
-    PATH_EDIT_CONTENTS = "edit_contents"
-    GLOBAL_LOCKED = "__locked__"
+    ROOT_OPT_REMOVABLE = "opt_removable"
+
+    OPTION_LABELS = {
+        ROOT_OPT_REMOVABLE: "Removable"
+    }
 
     def __init__(self, path):
         config.ConfigJSON.__init__(self, path)
         self.roots = {}
 
-    def get_roots(self):
+    def get_roots(self, expanded=False):
         """Get all the root paths
 
         Returns:
             list: list of all paths
         """
-        result = []
+        results = []
         with self.io as data:
             for path in data:
-                if path in [self.GLOBAL_LOCKED]:
-                    continue
-                result.append(path)
-        return result
+                results.append(self.expand_path(path) if expanded else path)
+        return results
 
     def expand_path(self, root):
         """Expand the given root path of environment variables,
@@ -238,55 +239,49 @@ class Config(config.ConfigJSON):
         Returns:
             str|None: label or None if not found
         """
+        return self.get_root_option(root, self.PATH_LABEL)
+
+    def get_root_option(self, root, option, default=None):
+        """Get an option for the specific root."""
         with self.io as data:
-            return data[root].get(self.PATH_LABEL)
+            return data[root].get(option, default)
 
-    def root_can_edit_path(self, root):
-        """Check where a tab should have
+    def set_root_option(self, root, option, value):
+        """Set an option for the specific root."""
 
-        Args:
-            root (str): root path to query
+        with self.io.write() as data:
+            data[root][option] = value
 
-        Returns:
-            bool
-        """
-        with self.io as data:
-            return data[root].get(self.PATH_EDIT_PATH, True)
-
-    def root_can_edit_contents(self, root):
-        with self.io as data:
-            return data[root].get(self.PATH_EDIT_CONTENTS, True)
-
-    def config_is_locked(self):
-        """Check if the whole config overrides the editable setting"""
-        with self.io as data:
-            return data.get(self.GLOBAL_LOCKED, False)
+    def is_writable(self):
+        """Check if the  file is writable by the user"""
+        return os.access(self.path, os.W_OK)
 
     def remove_root(self, root):
         """Remove the given root path
 
         Args:
             root (str): root path to remove
-
         """
         with self.io.write() as data:
             del data[root]
 
-    def add_root(self, path, label=None):
+    def add_root(self, path, label=None, relative=False):
         """Add a new root path
 
         Args:
             path(str): path to add
             label(str): display label for the tab
-
         """
+        if relative:
+            path = self.get_relative_path(path)
+
         with self.io.write() as data:
             item = data.get(path, {})
             if label:
                 item.update({self.PATH_LABEL: label})
             data[path] = item
 
-    def update_label(self, root, label):
+    def set_label(self, root, label):
         """Update the label of the given root path
 
         Args:
@@ -318,21 +313,20 @@ class StateConfig(config.ConfigJSON):
     READ_ONLY = "read_only"
     TAB_ORDER = "tab_order"
 
-    def __init__(self, app):
-        self.app = app
-        config.ConfigJSON.__init__(self, config.get_global_settings_file("codewall-state.dblx", create=False),
-                                   default={})
-        with self.io.write() as data:
-            if self.app not in data:
-                data[self.app] = {self.EXPANDED_STATES: {}}
+    def __init__(self, config_name):
+        config.ConfigJSON.__init__(
+            self,
+            config.get_global_settings_file(config_name,
+                                            create=False),
+            default={self.EXPANDED_STATES: {}})
 
     def set_read_only(self, value):
         with self.io.write() as data:
-            data[self.app][self.READ_ONLY] = value
+            data[self.READ_ONLY] = value
 
     def get_read_only(self, default=True):
         with self.io as data:
-            return data[self.app].get(self.READ_ONLY, default)
+            return data.get(self.READ_ONLY, default)
 
     def set_state(self, root_path, item_path):
         """Set the expanded state
@@ -343,7 +337,7 @@ class StateConfig(config.ConfigJSON):
 
         """
         with self.io.write() as data:
-            link = data[self.app][self.EXPANDED_STATES]
+            link = data[self.EXPANDED_STATES]
             if root_path not in link:
                 link[root_path] = [item_path]
             elif item_path not in link[root_path]:
@@ -358,7 +352,7 @@ class StateConfig(config.ConfigJSON):
 
         """
         with self.io.write() as data:
-            link = data[self.app][self.EXPANDED_STATES]
+            link = data[self.EXPANDED_STATES]
             if root_path in link:
                 if item_path in link[root_path]:
                     link[root_path].remove(item_path)
@@ -373,8 +367,8 @@ class StateConfig(config.ConfigJSON):
             list: list of files with all states
         """
         with self.io as data:
-            if root_path in data[self.app][self.EXPANDED_STATES]:
-                return data[self.app][self.EXPANDED_STATES][root_path]
+            if root_path in data[self.EXPANDED_STATES]:
+                return data[self.EXPANDED_STATES][root_path]
         return []
 
     def set_current_tab(self, root_path):
@@ -385,7 +379,7 @@ class StateConfig(config.ConfigJSON):
 
         """
         with self.io.write() as data:
-            data[self.app][self.CURRENT_TAB] = root_path
+            data[self.CURRENT_TAB] = root_path
 
     def get_current_tab(self):
         """Get the current tab
@@ -394,7 +388,7 @@ class StateConfig(config.ConfigJSON):
             str: root path of config
         """
         with self.io as data:
-            return data[self.app].get(self.CURRENT_TAB)
+            return data.get(self.CURRENT_TAB)
 
     def get_tab_order(self):
         """Get the order of the tabs
@@ -403,7 +397,7 @@ class StateConfig(config.ConfigJSON):
             list: list of root paths
         """
         with self.io.write() as data:
-            return data[self.app].get(self.TAB_ORDER, [])
+            return data.get(self.TAB_ORDER, [])
 
     def set_tab_order(self, paths):
         """Set the current tab order with the given paths
@@ -412,4 +406,4 @@ class StateConfig(config.ConfigJSON):
             paths (list[str]): tab paths in order
         """
         with self.io.write() as data:
-            data[self.app][self.TAB_ORDER] = paths
+            data[self.TAB_ORDER] = paths
