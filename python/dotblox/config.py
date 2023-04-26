@@ -182,7 +182,7 @@ class ConfigJSON(BaseConfig):
         json.dump(data, f, indent=4)
 
 
-def _path_find_generator(name):
+def _path_find_generator(name, include_global=False, global_priority=False):
     """Search for a config given the file name along sys.path
 
     Args:
@@ -191,14 +191,9 @@ def _path_find_generator(name):
     Returns:
         generator: generator object holding the paths
     """
-    seen = []
-    for path in sys.path:
-        # Sanitize paths just in case
-        path = path.replace("\\", '/')
-        # In case sys.path has multiples and has different slashes in the path
-        if path in seen:
-            continue
-        seen.append(path)
+    paths = get_config_paths(include_global=include_global, global_priority=global_priority)
+
+    for path in paths:
 
         config_path = os.path.join(path, name)
         config_path = config_path.replace("\\", '/')
@@ -208,40 +203,110 @@ def _path_find_generator(name):
         yield config_path
 
 
-def find_all(name):
+def find_all(name, include_global=False, global_priority=False):
     """Find all configs with the given name along sys.path
 
     Args:
         name (str): Name of file including the extension
     """
-    return list(_path_find_generator(name))
+    return list(_path_find_generator(name,
+                                     include_global=include_global,
+                                     global_priority=global_priority))
 
 
-def find_one(name):
+def find_one(name, include_global=False, global_priority=False):
     """Find the first config with the given name along sys.path
 
     Args:
         name (str): Name of file including the extension
     """
     try:
-        return next(_path_find_generator(name))
+        return next(_path_find_generator(name,
+                                         include_global=include_global,
+                                         global_priority=global_priority))
     except StopIteration:
         return None
 
+def is_findable(path, include_global=False):
+    """Ensure a generated config is findable on the path"""
+    parent = os.path.dirname(path).replace("\\", "/")
+    paths = get_config_paths(include_global=include_global)
+    return parent in paths
+
+def get_config_paths(include_global=False, global_priority=False):
+    """Get all paths along PYTHONPATH
+
+    Args:
+        include_global (bool): Include the dotbox global settings path
+            in the results
+        global_priority (bool): Choose to prepend/append the global path.
+            Default appends.
+
+    Returns:
+        list[str]: list of system paths
+    """
+    result = []
+
+    for path in sys.path:
+        # Sanitize paths just in case
+        path = path.replace("\\", '/')
+        # In case sys.path has multiples and has different slashes in the path
+        if path in result:
+            continue
+        result.append(path)
+
+    if include_global:
+        global_root = get_global_settings_folder(False)
+        if global_priority:
+            result.insert(0, global_root)
+        else:
+            result.append(global_root)
+
+    return result
 
 def get_global_settings_folder(create=True):
+    """Get the users home directory with the .dotblox directory
+
+    Args:
+        create (bool): Creates the folder on disk when queried
+
+    Returns:
+        str: path to directory
+    """
     user_path = os.path.expanduser("~")
     if user_path.endswith("Documents"):
         user_path = os.path.dirname(user_path)
     settings_path = os.path.join(user_path, ".dotblox")
     if create and not os.path.exists(settings_path):
         os.mkdir(settings_path)
-    return settings_path
+    return settings_path.replace("\\", "/")
 
-def get_global_settings_file(file_name, create=True, create_folder=True):
+def get_global_settings_file(file_name, parent=None, create=True, create_folder=True):
+    """Create any file in the global settings folder
+
+    Args:
+        file_name (str): Name of the file with extension.
+        create (bool): Create the file on disk.
+        create_folder (bool): Create the global settings directory.
+        parent: Add a parent folder to the path.
+
+    Returns:
+        str: path to
+    """
     settings_folder = get_global_settings_folder(create_folder)
+
+    if parent:
+        settings_folder = os.path.join(settings_folder, parent)
+        if create and os.path.exists(settings_folder):
+            os.mkdir(settings_folder)
+
     settings_file = os.path.join(settings_folder, file_name)
+
     if create and not os.path.exists(settings_file):
+        if not os.path.exists(settings_folder):
+            raise Exception("Unable to create file because parent "
+                            "folder has not been created. Set create_folder to True")
+
         with open(settings_file, 'w') as _:
             pass
     return settings_file
