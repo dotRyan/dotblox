@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Changelog - dotblox</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Changelog";
+        var mkdocs_page_input_path = "changelog.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> dotblox
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Welcome to .Blocks</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Changelog</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#unreleased">Unreleased</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#220-2022-07-21">2.2.0 - 2022-07-21</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#new">New</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed">Changed:</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fix">Fix</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#210-2022-07-15">2.1.0 - 2022-07-15</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#fix_1">Fix</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#new_1">New</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_1">Changed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#202-2022-07-13">2.0.2 - 2022-07-13</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#fix_2">Fix</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#201-2022-07-12">2.0.1 - 2022-07-12</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#fix_3">Fix</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#200-2022-07-12">2.0.0 - 2022-07-12</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#new_2">New</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_2">Changed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#110-2021-02-10">1.1.0 - 2021-02-10</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#new_3">New</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_3">Changed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fix_4">Fix</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#100-2020-05-12">1.0.0 - 2020-05-12</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_4">Changed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#new_4">New</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#011-2020-03-05">0.1.1 - 2020-03-05</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#fixed_1">Fixed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#010-2020-02-05">0.1.0 - 2020-02-05</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#new_5">New</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Houdini</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../houdini/">Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../houdini/general/">General</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Maya</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../maya/">Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../maya/general/">General</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../maya/modeling/">Modeling</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/codewall/">Code Wall</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">dotblox</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>Changelog</li>
+    <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/dotRyan/dotblox/edit/master/docs/changelog.md"
+          class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">#</a></h1>
+<p>All notable changes to this project will be documented in this file.<br />
+Documentation for front facing tools can be found <a href="https://dotryan.github.io/dotblox">here</a></p>
+<p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
+and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">#</a></h2>
+<ul>
+<li><a href="https://github.com/dotRyan/dotblox/compare/master...beta">beta</a>: this branch has the latest changes; these commits may be overwritten.</li>
+</ul>
+<h2 id="220-2022-07-21"><a href="https://github.com/dotRyan/dotblox/compare/v2.1.0...v2.2.0">2.2.0</a> - 2022-07-21<a class="headerlink" href="#220-2022-07-21" title="Permanent link">#</a></h2>
+<h3 id="new">New<a class="headerlink" href="#new" title="Permanent link">#</a></h3>
+<ul>
+<li>generated docs! https://dotryan.github.io/dotblox/</li>
+<li><a href="https://dotryan.github.io/dotblox/tools/codewall/">Code Wall</a> has an option to remove a tabs closeable status</li>
+</ul>
+<h3 id="changed">Changed:<a class="headerlink" href="#changed" title="Permanent link">#</a></h3>
+<ul>
+<li><a href="https://dotryan.github.io/dotblox/tools/codewall/">Code Wall</a> moved tab order to <code>StateConfig</code></li>
+</ul>
+<h3 id="fix">Fix<a class="headerlink" href="#fix" title="Permanent link">#</a></h3>
+<ul>
+<li><a href="https://dotryan.github.io/dotblox/tools/codewall/">Code Wall</a> <ul>
+<li>adjusted maya/houdini hooks to match dcc</li>
+<li>general cleanup</li>
+<li>double-click on folder items attempting to execute script</li>
+</ul>
+</li>
+</ul>
+<h2 id="210-2022-07-15"><a href="https://github.com/dotRyan/dotblox/compare/v2.0.2...v2.1.0">2.1.0</a> - 2022-07-15<a class="headerlink" href="#210-2022-07-15" title="Permanent link">#</a></h2>
+<h3 id="fix_1">Fix<a class="headerlink" href="#fix_1" title="Permanent link">#</a></h3>
+<ul>
+<li>TextEditor QPalette.All not supported</li>
+<li><a href="https://dotryan.github.io/dotblox/tools/codewall/">Code Wall</a> houdini code editor background not getting proper color</li>
+</ul>
+<h3 id="new_1">New<a class="headerlink" href="#new_1" title="Permanent link">#</a></h3>
+<ul>
+<li><a href="https://dotryan.github.io/dotblox/tools/codewall/">Code Wall</a><ul>
+<li>add option to disable drag and drop</li>
+<li>middle mouse scrolling while alt is pressed</li>
+</ul>
+</li>
+</ul>
+<h3 id="changed_1">Changed<a class="headerlink" href="#changed_1" title="Permanent link">#</a></h3>
+<ul>
+<li><a href="https://dotryan.github.io/dotblox/tools/codewall/">Code Wall</a> file icon provider shared pixmap cache</li>
+</ul>
+<h2 id="202-2022-07-13"><a href="https://github.com/dotRyan/dotblox/compare/v2.0.1...v2.0.2">2.0.2</a> - 2022-07-13<a class="headerlink" href="#202-2022-07-13" title="Permanent link">#</a></h2>
+<h3 id="fix_2">Fix<a class="headerlink" href="#fix_2" title="Permanent link">#</a></h3>
+<ul>
+<li><a href="https://dotryan.github.io/dotblox/tools/codewall/">Code Wall</a> not replacing <code>\\</code> on relative paths</li>
+</ul>
+<h2 id="201-2022-07-12"><a href="https://github.com/dotRyan/dotblox/compare/v2.0.0...v2.0.1">2.0.1</a> - 2022-07-12<a class="headerlink" href="#201-2022-07-12" title="Permanent link">#</a></h2>
+<h3 id="fix_3">Fix<a class="headerlink" href="#fix_3" title="Permanent link">#</a></h3>
+<ul>
+<li>dobloxmaya <code>get_qt_fullname</code> cast to long on some platforms</li>
+</ul>
+<h2 id="200-2022-07-12"><a href="https://github.com/dotRyan/dotblox/compare/v1.1.0...v2.0.0">2.0.0</a> - 2022-07-12<a class="headerlink" href="#200-2022-07-12" title="Permanent link">#</a></h2>
+<h3 id="new_2">New<a class="headerlink" href="#new_2" title="Permanent link">#</a></h3>
+<ul>
+<li><a href="https://dotryan.github.io/dotblox/tools/codewall/">Code Wall</a> tool for directly running snippets. Documentation to follow.</li>
+</ul>
+<h3 id="changed_2">Changed<a class="headerlink" href="#changed_2" title="Permanent link">#</a></h3>
+<ul>
+<li>Refactored folder structure</li>
+</ul>
+<h2 id="110-2021-02-10"><a href="https://github.com/dotRyan/dotblox/compare/v1.0.0...v1.1.0">1.1.0</a> - 2021-02-10<a class="headerlink" href="#110-2021-02-10" title="Permanent link">#</a></h2>
+<h3 id="new_3">New<a class="headerlink" href="#new_3" title="Permanent link">#</a></h3>
+<ul>
+<li>Icons added; <code>get_icon</code> function</li>
+<li>Added Axis.N for normal support</li>
+<li><code>dotbloxlib.config</code> module for future tool configurations</li>
+</ul>
+<h3 id="changed_3">Changed<a class="headerlink" href="#changed_3" title="Permanent link">#</a></h3>
+<ul>
+<li><a href="https://dotryan.github.io/dotblox/maya/modeling/#primatives">Primitives</a> tool can now choose axis for selected items</li>
+<li><code>get_component_mobject</code> signature has changed for simplicity</li>
+</ul>
+<h3 id="fix_4">Fix<a class="headerlink" href="#fix_4" title="Permanent link">#</a></h3>
+<ul>
+<li><code>FlatToolButton</code> now highlights on hover</li>
+<li><code>nodepath</code> handles underworld nodes</li>
+<li>remove shelve from <code>dotblox.mod</code> due to issues with local batch rendering</li>
+</ul>
+<h2 id="100-2020-05-12"><a href="https://github.com/dotRyan/dotblox/compare/v0.1.1...v1.0.0">1.0.0</a> - 2020-05-12<a class="headerlink" href="#100-2020-05-12" title="Permanent link">#</a></h2>
+<h3 id="changed_4">Changed<a class="headerlink" href="#changed_4" title="Permanent link">#</a></h3>
+<ul>
+<li>New structure of code base</li>
+<li>Changed maya code base to use <code>maya.cmds</code> instead of <code>pymel</code>. This is to support a wider range of audience and to support use of the <code>dotblox.core</code></li>
+<li>Run scripts have changed for <a href="https://dotryan.github.io/dotblox/maya/general/#colorizer">Colorizer</a>, <a href="https://dotryan.github.io/dotblox/maya/modeling/#beveler">Beveler</a> and <a href="https://dotryan.github.io/dotblox/maya/modeling/#mirrorer">Mirrorer</a></li>
+</ul>
+<h3 id="new_4">New<a class="headerlink" href="#new_4" title="Permanent link">#</a></h3>
+<ul>
+<li><a href="https://dotryan.github.io/dotblox/maya/modeling/#modeling">.Modeling</a> tool</li>
+<li><a href="https://dotryan.github.io/dotblox/maya/modeling/#primatives">Primitives</a> tool</li>
+<li><a href="https://dotryan.github.io/dotblox/maya/general/#pivoting">Pivoting</a> tool</li>
+<li>Unified way of handling mayas new workspace system</li>
+<li><code>dotbloxlib</code> for sharing of non dcc specific code</li>
+<li><code>dotbloxlib.qt</code> for Qt related code</li>
+<li>Widgets <code>FrameWidget</code>, <code>FlatToolButton</code> <code>WidgetToolButton</code></li>
+</ul>
+<h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">#</a></h3>
+<ul>
+<li><code>OptionVar</code> was always returning the default value</li>
+</ul>
+<h2 id="011-2020-03-05"><a href="https://github.com/dotRyan/dotblox/compare/v0.1.0...v0.1.1">0.1.1</a> - 2020-03-05<a class="headerlink" href="#011-2020-03-05" title="Permanent link">#</a></h2>
+<h3 id="fixed_1">Fixed<a class="headerlink" href="#fixed_1" title="Permanent link">#</a></h3>
+<ul>
+<li><code>Colorizer</code> now sets the outliner color as the raw color</li>
+</ul>
+<h2 id="010-2020-02-05"><a href="https://github.com/dotRyan/dotblox/releases/tag/v0.1.0">0.1.0</a> - 2020-02-05<a class="headerlink" href="#010-2020-02-05" title="Permanent link">#</a></h2>
+<h3 id="new_5">New<a class="headerlink" href="#new_5" title="Permanent link">#</a></h3>
+<ul>
+<li><a href="https://dotryan.github.io/dotblox/maya/modeling/#beveler">Beveler</a> tool</li>
+<li><a href="https://dotryan.github.io/dotblox/maya/general/#colorizer">Colorizer</a> tool</li>
+<li><a href="https://dotryan.github.io/dotblox/maya/modeling/#mirrorer">Mirrorer</a> tool</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Welcome to .Blocks"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../houdini/" class="btn btn-neutral float-right" title="Setup">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/dotRyan/dotblox/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../houdini/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

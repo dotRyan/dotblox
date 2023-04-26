@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Code Wall - dotblox</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Code Wall";
+        var mkdocs_page_input_path = "tools/codewall.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> dotblox
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Welcome to .Blocks</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changelog/">Changelog</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Houdini</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../houdini/">Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../houdini/general/">General</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Maya</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../maya/">Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../maya/general/">General</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../maya/modeling/">Modeling</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Code Wall</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#config">Config</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#create-new-config">Create New Config</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#add-to-existing-config">Add To Existing Config</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#config-editor">Config Editor</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#code-editor">Code Editor</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#hot-keys">Hot Keys</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#executing">Executing</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#menu-options">Menu Options</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#context-menu-options">Context Menu Options</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#deleting-items">Deleting Items</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">dotblox</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Tools &raquo;</li>
+      <li>Code Wall</li>
+    <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/dotRyan/dotblox/edit/master/docs/tools/codewall.md"
+          class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="code-wall">Code Wall<a class="headerlink" href="#code-wall" title="Permanent link">#</a></h1>
+<p>Easily create a library of snippets in various locations. To run a script 
+simply double click from within the interface. To create a script you can 
+do this on disk ork quickly through the <a href="#code-editor">Code Editor</a></p>
+<p><strong>Available In:</strong></p>
+<ul>
+<li><a href="../../houdini/general/#code-wall">houdini</a></li>
+<li><a href="../../maya/general/#code-wall">maya</a></li>
+</ul>
+<p><img alt="img" src="../../img/tools_codewall.png" /></p>
+<h2 id="config">Config<a class="headerlink" href="#config" title="Permanent link">#</a></h2>
+<p>This tool looks for all <code>codewall.dblx</code> files across the <code>PYTHONPATH</code>. 
+All will be loaded into the tool.</p>
+<h3 id="create-new-config">Create New Config<a class="headerlink" href="#create-new-config" title="Permanent link">#</a></h3>
+<p>Create a <code>codewall.dblx</code> file anywhere on the <code>PYTHONPATH</code>. </p>
+<p>This file can be empty or contain:</p>
+<pre><code class="language-json">{
+  &quot;__locked__&quot;: false,
+  &quot;path/to/folder&quot;: {
+    &quot;label&quot;: &quot;Tab Label&quot;,
+    &quot;edit_path&quot;: true,
+    &quot;edit_contents&quot;: true
+  }
+}
+</code></pre>
+<p><strong>Minumum Required:</strong> </p>
+<pre><code class="language-json">{
+  &quot;path/to/folder&quot;: {
+  }
+}
+</code></pre>
+<ol>
+<li>Refresh the interface from the top right menu</li>
+<li>See <a href="#add-to-existing-config">Add To Existing Config</a></li>
+</ol>
+<h6 id="global-options">Global Options:<a class="headerlink" href="#global-options" title="Permanent link">#</a></h6>
+<ul>
+<li><strong>__locked__</strong>: allows editing of the config file from the UI (default: <code>false</code>)</li>
+</ul>
+<h6 id="path-options">Path Options:<a class="headerlink" href="#path-options" title="Permanent link">#</a></h6>
+<ul>
+<li><strong>label:</strong> Display name of the tab. (default: <code>paths folder name</code>)</li>
+<li><strong>edit_path:</strong> allows editing/removal of the path through the UI (default: <code>true</code>)</li>
+<li><strong>edit_contents:</strong> allows editing/removal of the folders contents through the UI (default: <code>true</code>)</li>
+</ul>
+<h3 id="add-to-existing-config">Add To Existing Config<a class="headerlink" href="#add-to-existing-config" title="Permanent link">#</a></h3>
+<ol>
+<li>
+<p>Underneath the config sub menu. Click the path of your new config.</p>
+<ul>
+<li>if the config is not editable it will not show up</li>
+</ul>
+</li>
+<li>
+<p>This will pop open the <a href="#config-editor">Config Editor</a></p>
+</li>
+</ol>
+<h3 id="config-editor">Config Editor<a class="headerlink" href="#config-editor" title="Permanent link">#</a></h3>
+<p>The editor be opened from two ways:</p>
+<ul>
+<li><code>Menu</code> -&gt; <code>Config</code> -&gt; <code>path/to/codewall.dblx</code></li>
+<li><code>Right Click Tab</code> -&gt; <code>Update Settings</code></li>
+</ul>
+<p><img alt="img" src="../../img/tools_codewall_config_editor.png" /></p>
+<h5 id="label">Label:<a class="headerlink" href="#label" title="Permanent link">#</a></h5>
+<p>The tab display name. If left blank the folder name will be used  </p>
+<h5 id="path">Path:<a class="headerlink" href="#path" title="Permanent link">#</a></h5>
+<ul>
+<li><strong>absolute path:</strong> Can be a direct path to the folder</li>
+<li><strong>relative path:</strong> This can be a direct path or a relative path to the current 
+config file<br />
+You can use the <code>Relative Path</code> check box to automatically make it relative.<br />
+This option is useful if you keep your config and scripts together within 
+the same folder structure.<br />
+(e.g. <code>../relative/path/to/folder</code>)</li>
+<li><strong>environment variables</strong>: Environment variables can be used within the path.<br />
+(e.g. the path can be set to <code>$MAYA_APP_DIR/scripts</code> and this will point 
+to a scripts folder under the maya directory). Variable must start with <code>$</code>  </li>
+</ul>
+<h2 id="code-editor">Code Editor<a class="headerlink" href="#code-editor" title="Permanent link">#</a></h2>
+<p>When modifying/creating a new script from within the tool this dialog will popup.</p>
+<p><img alt="img" src="../../img/tools_codewall_code_editor.png" /></p>
+<h3 id="hot-keys">Hot Keys<a class="headerlink" href="#hot-keys" title="Permanent link">#</a></h3>
+<ul>
+<li><code>CTRL + ENTER</code>: Execute Selection</li>
+</ul>
+<h3 id="executing">Executing<a class="headerlink" href="#executing" title="Permanent link">#</a></h3>
+<ul>
+<li><strong>Execute:</strong> runs the entire script.</li>
+<li><strong>Execute Selection:</strong> This will execute all the lines that are within
+the selection.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Attempting to close the dialog without saving changes will prompt you to save.<br />
+Renaming the file will ask you to confirm the name change.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This will <strong>NOT</strong> be saved by <code>CTRL + S</code>. </p>
+</div>
+<h2 id="menu-options">Menu Options<a class="headerlink" href="#menu-options" title="Permanent link">#</a></h2>
+<ul>
+<li><strong>Read Only:</strong> With this enabled you will be unable to drag and drop
+items within the interface. (i.e. This will move files around on disk.)</li>
+<li><strong>Config:</strong> list all the current configs loaded into the UI. 
+Select one to open the <a href="#config-editor">Config Editor</a>.</li>
+<li><strong>Refresh:</strong> reloads the interface and searches for new config files.</li>
+</ul>
+<h2 id="context-menu-options">Context Menu Options<a class="headerlink" href="#context-menu-options" title="Permanent link">#</a></h2>
+<p>Some options may not be visible based on the config</p>
+<ul>
+<li><strong>Run:</strong> execute the selected script.</li>
+<li><strong>New Folder:</strong> create a new folder at the selected path.</li>
+<li><strong>New Script:</strong> create a new script at the selected path.</li>
+<li><strong>Modify:</strong> open the <a href="#code-editor">Code Editor</a> with the current script.</li>
+<li><strong>Rename:</strong> rename the selected item.</li>
+<li><strong>Delete:</strong> delete the selected item. </li>
+</ul>
+<h2 id="deleting-items">Deleting Items<a class="headerlink" href="#deleting-items" title="Permanent link">#</a></h2>
+<p>Deleting is <strong>PERMANENT</strong>. There is no recycle bin.<br />
+This tool has the option to <code>Archive</code> instead. This will create an <code>__archive</code>
+folder in the current directory and copy items to this instead. (Currently, this does not get hidden from the interface.)
+The selected item for deletion will be renamed to <code>item_name.YYYMMDD.ext</code></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../maya/modeling/" class="btn btn-neutral float-left" title="Modeling"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/dotRyan/dotblox/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../maya/modeling/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
