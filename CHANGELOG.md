@@ -6,19 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
-- [beta]: this branch has the latest changes; these commits may be overwritten.
+- [beta]: this branch has the latest updates; these commits may be overwritten.
 
-## [2.3.0] - 2022-07-27
+## [2.3.0] - 2023-04-26
 ### New 
 - bootstrap module for installation dccs
 - easy installation for houdini and maya 
 - houdini show_python_panel
+- config library added functions to get current environment
 
 ### Changed
-- houdini codewall python panel label
+- [Code Wall] houdini python panel label
+- [Code Wall] config and state settings adjusted along with the dialog
 
 ### Fix
 - [Code Wall] context menu showing up twice on linux
+- [Code Wall] houdini execution switched to runpy
 
 ## [2.2.0] - 2022-07-21
 ### New
@@ -111,7 +114,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Mirrorer] tool
 
 
-[beta]: https://github.com/dotRyan/dotblox/compare/master...beta
+[beta]: https://github.com/dotRyan/dotblox/compare/main...beta
 [2.3.0]: https://github.com/dotRyan/dotblox/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/dotRyan/dotblox/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/dotRyan/dotblox/compare/v2.0.2...v2.1.0
