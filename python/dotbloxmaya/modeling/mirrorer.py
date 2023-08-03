@@ -45,7 +45,7 @@ class MirrorerWidget(QtWidgets.QWidget):
             self.ui.neg_z_btn: [AXIS.Z, DIRECTION.NEGATIVE],
         }
 
-        for button, args in button_mapping.iteritems():
+        for button, args in button_mapping.items():
             button.clicked.connect(partial(self.do_mirror, *args))
 
         self.start_up_settings()

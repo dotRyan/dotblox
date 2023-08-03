@@ -5,7 +5,6 @@ from PySide2 import QtWidgets, QtCore
 from maya import cmds
 import maya.OpenMayaUI as omui
 
-
 class DockWindow(MayaQWidgetDockableMixin, QtWidgets.QWidget):
     """This class is not meant to be instanced outside of `DockWindowManager`
 
@@ -167,7 +166,12 @@ if hasattr({source_module}, "{attr}"):
             # The current parent is the workspace control created by maya
             parent = omui.MQtUtil.getCurrentParent()
             win_ptr = omui.MQtUtil.findControl(win.objectName())
-            omui.MQtUtil.addWidgetToMayaLayout(long(win_ptr), long(parent))
+            try:
+                omui.MQtUtil.addWidgetToMayaLayout(int(win_ptr), int(parent))
+            except:
+                # TODO: python3 incompatibility
+                omui.MQtUtil.addWidgetToMayaLayout(long(win_ptr), long(parent))
+
         else:
             # get the state before the workspace control is created
             win.create_workspace_control(module_name, attr)
