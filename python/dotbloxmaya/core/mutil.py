@@ -7,12 +7,21 @@ from shiboken2 import getCppPointer, wrapInstance
 
 
 def get_qt_fullname(widget):
-    return omui1.MQtUtil.fullName(long(getCppPointer(widget)[0]))
+    try:
+        return omui1.MQtUtil.fullName(int(getCppPointer(widget)[0]))
+    except:
+        # TODO: python3 incompatibility
+        return omui1.MQtUtil.fullName(long(getCppPointer(widget)[0]))
 
 
 def maya_main_window():
     maya_main_window = omui1.MQtUtil.mainWindow()
-    return wrapInstance(long(maya_main_window), QtWidgets.QMainWindow)
+    try:
+        return wrapInstance(int(maya_main_window), QtWidgets.QMainWindow)
+    except:
+        # TODO: python3 incompatibility
+        return wrapInstance(long(maya_main_window), QtWidgets.QMainWindow)
+
 
 
 class PreserveSelection(object):
@@ -87,7 +96,6 @@ class OptionVar(object):
             option_var.get("named")
 
         """
-
         if prefix is None:
             prefix = ""
         if len(prefix):
@@ -95,7 +103,13 @@ class OptionVar(object):
         self.prefix = prefix
 
     def set(self, key, value):
-        if isinstance(value, (str, unicode)):
+        try:
+            t = bytes
+        except:
+            # TODO: python3 incompatibility
+            t = unicode
+
+        if isinstance(value, (str, t)):
             kwarg = "stringValue"
         elif isinstance(value, float):
             kwarg = "floatValue"
@@ -127,20 +141,30 @@ class Repeatable():
         Repeatable.repeat(test_make)
     """
     history = {}
+    SCRIPT_JOB = None
 
-    def _clean_dotbox_repeatable_history():
+    @classmethod
+    def _clean_dotbox_repeatable_history(cls):
         repeat_history = cmds.repeatLast(query=True, commandNameList=True)
-        for command in Repeatable.history.values()[:]:
+        for command in cls.history.values():
             if command.label not in repeat_history:
-                del Repeatable.history[command.id_]
-    # Maya may not be initialized if running from mayapy
-    if "scriptJob" in dir(cmds):
+                del cls.history[command.id_]
+
+    @classmethod
+    def _start_script_job(cls):
+        if cls.SCRIPT_JOB is not None:
+            return
+
+        # Maya may not be initialized if running from mayapy
+        if "scriptJob" not in dir(cmds):
+            return
+
         for job in cmds.scriptJob(listJobs=True):
-            if _clean_dotbox_repeatable_history.__name__ in job:
+            if cls._clean_dotbox_repeatable_history.__name__ in job:
                 job_id = int(job.split(":")[0])
                 cmds.scriptJob(kill=job_id)
                 break
-        SCRIPT_JOB = cmds.scriptJob(event=["RecentCommandChanged", _clean_dotbox_repeatable_history])
+        cls.SCRIPT_JOB = cmds.scriptJob(event=["RecentCommandChanged", cls._clean_dotbox_repeatable_history])
 
     class RepeatableCommand():
         def __init__(self, func, args=(), kwargs={}):
@@ -166,7 +190,8 @@ class Repeatable():
 
     @classmethod
     def make(cls, func, args=(), kwargs={}):
-        return Repeatable.RepeatableCommand(func, args, kwargs)
+        cls._start_script_job()
+        return cls.RepeatableCommand(func, args, kwargs)
 
     def __call__(self, func):
         def wrap(*args, **kwargs):

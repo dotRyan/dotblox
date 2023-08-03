@@ -250,7 +250,7 @@ class BevelEditor():
                 cmds.warning("Component not supported %s" % component)
 
         # Get the edge perimeter of all the faces at once
-        for node, face_map in face_map.iteritems():
+        for node, face_map in face_map.items():
             edge_perimeter = cmds.polyListComponentConversion(face_map,
                                                               toEdge=True,
                                                               border=True)
@@ -271,7 +271,7 @@ class BevelEditor():
         """
         edge_map = cls._eval_components(*components)
 
-        for vis_node, selected_edges in edge_map.iteritems():
+        for vis_node, selected_edges in edge_map.items():
             # Make sure the node is a vis node
             if vis_node != cls.get_vis_node(vis_node):
                 cmds.warning("Node %s is not a vis node" % vis_node)
@@ -300,7 +300,7 @@ class BevelEditor():
         """
         edge_map = cls._eval_components(*components)
 
-        for vis_node, selected_edges in edge_map.iteritems():
+        for vis_node, selected_edges in edge_map.items():
             # Make sure the node is a vis node
             if vis_node != cls.get_vis_node(vis_node):
                 cmds.warning("Node %s is not a vis node" % vis_node)
