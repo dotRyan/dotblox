@@ -1,6 +1,7 @@
 from dotbloxmaya.core.constant import AXIS, DIRECTION
 from dotbloxmaya.core.ui import dockwindow
 from PySide2 import QtWidgets, QtCore, QtGui
+from functools import partial
 
 
 from dotbloxmaya.core.mutil import Repeatable, Undoable, OptionVar
@@ -45,7 +46,7 @@ class MirrorerWidget(QtWidgets.QWidget):
         }
 
         for button, args in button_mapping.iteritems():
-            button.clicked.connect(lambda args=args: self.doMirror(*args))
+            button.clicked.connect(partial(self.do_mirror, *args))
 
         self.start_up_settings()
 
@@ -55,7 +56,7 @@ class MirrorerWidget(QtWidgets.QWidget):
 
     @Repeatable()
     @Undoable()
-    def doMirror(self, axis, direction):
+    def do_mirror(self, axis, direction):
         """
         Args:
             axis: 0:X, 1:Y, 2:Z

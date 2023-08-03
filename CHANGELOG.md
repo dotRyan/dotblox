@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - [beta]: this branch has the latest updates; these commits may be overwritten.
 
+## [2.3.1]
+### Fix
+- [Mirrorer] not working in maya 2022
+
 ## [2.3.0] - 2023-04-26
 ### New 
 - bootstrap module for installation dccs
