@@ -47,8 +47,8 @@ class CodeEditor(QtWidgets.QWidget):
         try:
             self.hook.execute_text(self._sanitize_text(text),
                                    self.ui.name_field.text() or None)
-        except Exception as e:
-            traceback.print_exc(e)
+        except Exception:
+            traceback.print_exc()
 
     def _on_execute_selected(self):
         """Execute the selected text"""

@@ -176,8 +176,8 @@ class FileViewWidget(QtWidgets.QWidget):
         """
         try:
             self.hook.run_file(file_path)
-        except Exception as e:
-            traceback.print_exc(e)
+        except Exception:
+            traceback.print_exc()
 
     def _on_modify_script(self, file_path):
         """Create/Edit the given file
